@@ -1,24 +1,34 @@
-# Lumen PHP Framework
+# Homzmart Payment
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 [![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## How To Run The Project
 
-## Official Documentation
+``` bash
+$ git clone project-url
+$ composer install
+$ cp .env.example .env
+$ php -S localhost:8080 -t public
+```
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+# List of available drivers
+- [payfort](https://paymentservices.amazon.com/) :expressionless:
+- [paymob](https://paymob.com/) :dancer:
+- [tabby](https://tabby.ai/) :dancer:
+- [tamara](https://docs.tamara.co/) :bangbang:
 
-## Contributing
+## How To Use
+* Add your payment in `App\Http\Enums\PaymentGateways Enum`
+* Add your payment domain model in `App\Http\Services\[payment-dir]` with at minimum one class ex: `{Payment}Startegy.php` implementing `App\Http\Contracts\PayFortStrategy`
+* Add your payment config in config dir
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Test
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+``` bash
+$ vendor/bin/phpunit
+```
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Payment is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
