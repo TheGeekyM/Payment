@@ -4,12 +4,15 @@ namespace Http\Services;
 
 use App\Http\Dtos\CreditDto;
 use App\Http\Dtos\CustomerDto;
+use App\Http\Dtos\ItemDto;
 use App\Http\Dtos\OrderDto;
 use App\Http\Dtos\PaymentAssemblerDto;
 use App\Http\Dtos\PaymentDto;
+use App\Http\Dtos\ShippingAddressDto;
 use App\Http\Enums\PaymentGateways;
 use App\Http\Enums\PaymentMethods;
 use App\Http\Services\PaymentService;
+use Doubles\Dummies\PaymentAssemblerDummy;
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -20,16 +23,7 @@ class PaymentServiceTest extends \TestCase
      */
     public function testPayFortPaymentGatway()
     {
-        $paymentGateway = PaymentGateways::payfort;
-        $paymentMethod = PaymentMethods::visa;
-
-        $paymentDto = new PaymentDto($paymentGateway, $paymentMethod);
-        $OrderDto = new OrderDto(500 - time(), 100, 'SAR');
-        $CreditDto = new CreditDto(4005550000000001, 2505, 123);
-        $customerDto = new CustomerDto(1, "Mohamed Emad", "user@user.com", '127.0.0.1', 'en', $CreditDto);
-
-        $paymentAssemblerDto = new PaymentAssemblerDto($paymentDto, $OrderDto, $customerDto);
-
+        $paymentAssemblerDto = PaymentAssemblerDummy::buildDummyObject(PaymentGateways::payfort, PaymentMethods::visa);
         $payment = (new PaymentService())->initTransaction($paymentAssemblerDto);
 
         $crawler = $this->submitPaymentPage($payment['gateway_url'], $payment['params']);

@@ -17,6 +17,5 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-
 $router->get('pay','PaymentController@pay');
 $router->get('pay/{paymentGateway}/callback','PaymentController@callback');

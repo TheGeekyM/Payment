@@ -7,6 +7,9 @@ use App\Http\Dtos\PaymentTransactionDto;
 use App\Http\Enums\PaymentGateways;
 use App\Http\Enums\PaymentMethods;
 use App\Http\Factories\PaymentFactory;
+use App\Http\Libs\HttpClient;
+use App\Http\Services\Tabby\TabbyStrategy;
+use App\Http\Services\Tamara\TamaraStrategy;
 
 class PaymentService
 {

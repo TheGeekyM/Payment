@@ -6,7 +6,7 @@ use App\Http\Enums\PaymentGateways;
 use App\Http\Factories\PaymentFactory;
 use App\Http\Services\Payfort\PayFortStrategy;
 use App\Http\Services\Paymob\PaymobStrategy;
-use App\Http\Strategies\ApplePayStrategy;
+use App\Http\Services\Tabby\TabbyStrategy;
 
 class PaymentFactoryTest extends \TestCase
 {
@@ -22,9 +22,9 @@ class PaymentFactoryTest extends \TestCase
         $this->assertInstanceOf(PaymobStrategy::class, $paymobPaymentStrategy);
     }
 
-    public function testGetApplePayInstanceIfPaymentMethodIsApplePay(): void
+    public function testGetTabbyInstanceIfPaymentMethodIsApplePay(): void
     {
-        $applePayPaymentStrategy = PaymentFactory::getInstance(PaymentGateways::applePay);
-        $this->assertInstanceOf(ApplePayStrategy::class, $applePayPaymentStrategy);
+        $tabbyPaymentStrategy = PaymentFactory::getInstance(PaymentGateways::tabby);
+        $this->assertInstanceOf(TabbyStrategy::class, $tabbyPaymentStrategy);
     }
 }
