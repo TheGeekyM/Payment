@@ -5,8 +5,8 @@ namespace App\Http\Services\Tabby;
 use App\Http\Contracts\HttpClientInterface;
 use App\Http\Contracts\PaymentStrategyInterface;
 use App\Http\Dtos\CallbackDto;
-use App\Http\Dtos\PaymentAssemblerDto;
 use App\Http\Dtos\PaymentTransactionDto;
+use App\Http\Entities\Order;
 use App\Http\Enums\OrderStatuses;
 use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
 use Illuminate\Http\Client\RequestException;
@@ -16,30 +16,29 @@ class TabbyStrategy implements PaymentStrategyInterface
 {
     private HttpClientInterface $client;
 
-    private TabbyRequestBuilder $builder;
-
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-        $this->builder = new TabbyRequestBuilder();
     }
 
     /**
      * @throws Exception
      */
-    public function beginTransaction(PaymentAssemblerDto $paymentAssemblerDto): PaymentTransactionDto
+    public function beginTransaction(Order $order): PaymentTransactionDto
     {
-        $auth = $this->createSession($paymentAssemblerDto);
+        $request = TabbyRequestMapper::createCheckoutRequest($order);
+        $auth = $this->createSession($request);
+
         return new PaymentTransactionDto($auth['configuration']['available_products']['installments'][0]['web_url'], []);
     }
 
     /**
      * @throws RequestException
      */
-    private function createSession(PaymentAssemblerDto $paymentAssemblerDto): array
+    private function createSession(array $request): array
     {
         return $this->client->sendAuthorizedRequest('https://api.tabby.ai/api/v2/checkout',
-            config('tabby.public_key'), 'post', $this->builder->build($paymentAssemblerDto));
+            config('tabby.public_key'), 'post', $request);
     }
 
     /**

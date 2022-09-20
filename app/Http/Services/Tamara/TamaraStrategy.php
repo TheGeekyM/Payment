@@ -5,9 +5,10 @@ namespace App\Http\Services\Tamara;
 use App\Http\Contracts\HttpClientInterface;
 use App\Http\Contracts\PaymentStrategyInterface;
 use App\Http\Dtos\CallbackDto;
-use App\Http\Dtos\PaymentAssemblerDto;
 use App\Http\Dtos\PaymentTransactionDto;
+use App\Http\Entities\Order;
 use App\Http\Enums\OrderStatuses;
+use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
 use Illuminate\Http\Client\RequestException;
 use Exception;
 
@@ -15,21 +16,20 @@ class TamaraStrategy implements PaymentStrategyInterface
 {
     private HttpClientInterface $client;
 
-    private TamaraRequestBuilder $builder;
-
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-        $this->builder = new TamaraRequestBuilder();
     }
 
     /**
      * @throws Exception
      */
-    public function beginTransaction(PaymentAssemblerDto $paymentAssemblerDto): PaymentTransactionDto
+    public function beginTransaction(Order $order): PaymentTransactionDto
     {
-        $this->checkIfValidAmount($paymentAssemblerDto);
-        $session = $this->createSession($paymentAssemblerDto);
+        $request = TamaraRequestMapper::map($order);
+
+        $this->checkIfValidAmount($request);
+        $session = $this->createSession($request);
 
         return new PaymentTransactionDto($session['checkout_url'], ['checkout_id' => $session['checkout_id'],
             'order_id' => $session['order_id']
@@ -52,10 +52,10 @@ class TamaraStrategy implements PaymentStrategyInterface
     /**
      * @throws RequestException
      */
-    private function createSession(PaymentAssemblerDto $paymentAssemblerDto): array
+    private function createSession(array $request): array
     {
         return $this->client->sendAuthorizedRequest(config('tamara.url') . '/checkout',
-            config('tamara.jwt_token'), 'post', $this->builder->build($paymentAssemblerDto));
+            config('tamara.jwt_token'), 'post', $this->builder->build($request));
     }
 
     /**
@@ -75,7 +75,7 @@ class TamaraStrategy implements PaymentStrategyInterface
             return new CallbackDto(OrderStatuses::succeeded, $response, $response['id']);
         }
 
-        throw new InvalidPaymentId('Invalid Payment Id');
+        throw new InvalidPaymentId('Payment Id Id Invalid');
     }
 
     /**

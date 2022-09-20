@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Contracts\PaymentRequestBuilderInterface;
+use App\Http\Services\PaymentRequestBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(PaymentRequestBuilderInterface::class, PaymentRequestBuilder::class);
     }
 }

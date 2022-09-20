@@ -7,6 +7,7 @@ use App\Http\Contracts\PaymentStrategyInterface;
 use App\Http\Dtos\CallbackDto;
 use App\Http\Dtos\PaymentAssemblerDto;
 use App\Http\Dtos\PaymentTransactionDto;
+use App\Http\Entities\Order;
 use JetBrains\PhpStorm\NoReturn;
 
 class PayFortStrategy implements PaymentStrategyInterface
@@ -41,7 +42,7 @@ class PayFortStrategy implements PaymentStrategyInterface
             'https://paymentservices.payfort.com/FortAPI/paymentApi';
     }
 
-    public function beginTransaction(PaymentAssemblerDto $paymentAssemblerDto): PaymentTransactionDto
+    public function beginTransaction(Order $order): PaymentTransactionDto
     {
         return $paymentAssemblerDto->getPaymentDto()->getToken() ?
             $this->getRedirectionRequestParams($paymentAssemblerDto) : $this->getTokenization($paymentAssemblerDto);

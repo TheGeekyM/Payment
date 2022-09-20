@@ -2,6 +2,7 @@
 
 namespace App\Http\Entities;
 
+use App\Http\Enums\PaymentMethods;
 use App\Http\ValueObjects\Money;
 
 class Order
@@ -27,9 +28,9 @@ class Order
     private string $countryCode;
 
     /**
-     * @var string
+     * @var PaymentMethods
      */
-    private string $paymentType;
+    private PaymentMethods $paymentType;
 
     /**
      * @var ?string
@@ -92,7 +93,7 @@ class Order
         $this->countryCode = strtoupper(substr($countryCode, 0, 2));
     }
 
-    public function setPaymentType(string $paymentType): void
+    public function setPaymentType(PaymentMethods $paymentType): void
     {
         $this->paymentType = $paymentType;
     }
@@ -138,7 +139,7 @@ class Order
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getOrderReferenceId(): string
     {
@@ -170,9 +171,9 @@ class Order
     }
 
     /**
-     * @return string
+     * @return PaymentMethods
      */
-    public function getPaymentType(): string
+    public function getPaymentType(): PaymentMethods
     {
         return $this->paymentType;
     }
