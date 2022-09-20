@@ -23,11 +23,6 @@ class Order
     private Money $amount;
 
     /**
-     * @var string
-     */
-    private string $countryCode;
-
-    /**
      * @var PaymentMethods
      */
     private PaymentMethods $paymentType;
@@ -58,11 +53,6 @@ class Order
     private array $orderItemArray;
 
     /**
-     * @var MerchantUrl
-     */
-    private MerchantUrl $merchantUrl;
-
-    /**
      * @var Customer
      */
     private Customer $consumer;
@@ -86,11 +76,6 @@ class Order
     public function setAmount(Money $amount): void
     {
         $this->amount = $amount;
-    }
-
-    public function setCountryCode(string $countryCode): void
-    {
-        $this->countryCode = strtoupper(substr($countryCode, 0, 2));
     }
 
     public function setPaymentType(PaymentMethods $paymentType): void
@@ -133,11 +118,6 @@ class Order
         $this->consumer = $consumer;
     }
 
-    public function setMerchantUrl(MerchantUrl $merchantUrl): void
-    {
-        $this->merchantUrl = $merchantUrl;
-    }
-
     /**
      * @return string
      */
@@ -160,14 +140,6 @@ class Order
     public function getAmount(): Money
     {
         return $this->amount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountryCode(): string
-    {
-        return $this->countryCode;
     }
 
     /**
@@ -216,14 +188,6 @@ class Order
     public function getOrderItemArray(): array
     {
         return $this->orderItemArray;
-    }
-
-    /**
-     * @return MerchantUrl
-     */
-    public function getMerchantUrl(): MerchantUrl
-    {
-        return $this->merchantUrl;
     }
 
     /**

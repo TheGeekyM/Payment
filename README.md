@@ -28,7 +28,7 @@ $ php -S localhost:8080 -t public
 - [paymob](https://paymob.com/) :dancer:
 - [tabby](https://tabby.ai/) :dancer: Tabby is split in 4 payment method, Which means you can buy anything and pay it as
   a 4-month installment.
-- [tamara](https://docs.tamara.co/) :bangbang:  is a payment method that gives you the ability to split your order
+- [tamara](https://docs.tamara.co/) :dancer:  is a payment method that gives you the ability to split your order
   payment on several payments with zero interest.
 
 ## How To Use

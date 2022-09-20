@@ -20,8 +20,8 @@ class TabbyRequestMapper
                 ],
                 "shipping_address" => [
                     "city" => $order->getBilling()->getCity(),
-                    "address" => $order->getBilling()->getLine1(),
-                    "zip" => $order->getBilling()->getCountryCode() //neeeds to be changed
+                    "address" => $order->getBilling()->getAddress(),
+                    "zip" => $order->getBilling()->getZipCode()
                 ],
                 "order" => [
                     "reference_id" => $order->getOrderReferenceId(),
@@ -43,9 +43,9 @@ class TabbyRequestMapper
             "lang" => $order->getLocale(),
             "merchant_code" => config('tabby.merchant_code'),
             "merchant_urls" => [
-                "success" => $order->getMerchantUrl()->getSuccessUrl(),
-                "cancel" => $order->getMerchantUrl()->getCancelUrl(),
-                "failure" => $order->getMerchantUrl()->getFailureUrl()
+                "success" => url(config('tabby.callback_url')),
+                "cancel" => url(config('tabby.callback_url')),
+                "failure" => url(config('tabby.callback_url'))
             ]];
     }
 

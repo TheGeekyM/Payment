@@ -30,13 +30,23 @@ class Address
     private mixed $city;
 
     /**
+     * @var mixed
+     */
+    private mixed $country;
+
+    /**
      * @var string
      */
-    private string $line1;
+    private string $address;
 
-    public function setLine1(string $line1): void
+    /**
+     * @var string
+     */
+    private string $zip_code;
+
+    public function setAddress(string $address): void
     {
-        $this->line1 = $line1;
+        $this->address = $address;
     }
 
 
@@ -50,9 +60,9 @@ class Address
         $this->phoneNumber = $phoneNumber;
     }
 
-    public function setCountryCode(mixed $countryCode): void
+    public function setCountryCode(mixed $country): void
     {
-        $this->countryCode = $countryCode;
+        $this->countryCode = strtoupper(substr($country, 0 , 2));
     }
 
     /**
@@ -82,9 +92,9 @@ class Address
     /**
      * @return string
      */
-    public function getLine1(): string
+    public function getAddress(): string
     {
-        return $this->line1;
+        return $this->address;
     }
 
     /**
@@ -121,5 +131,35 @@ class Address
         $this->firstName = $name[0] ?? 'John';
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCountry(): mixed
+    {
+        return $this->country;
+    }
 
+    /**
+     * @param mixed $country
+     */
+    public function setCountry(mixed $country): void
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipCode(): string
+    {
+        return $this->zip_code;
+    }
+
+    /**
+     * @param string $zip_code
+     */
+    public function setZipCode(string $zip_code): void
+    {
+        $this->zip_code = $zip_code;
+    }
 }

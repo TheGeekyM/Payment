@@ -85,6 +85,7 @@ class PaymentController extends Controller
         );
 
         $shippingAddressDto = new ShippingAddressDto(
+            $shippingAddressRequest['country'],
             $shippingAddressRequest['city'],
             $shippingAddressRequest['address'],
             $shippingAddressRequest['zip'],

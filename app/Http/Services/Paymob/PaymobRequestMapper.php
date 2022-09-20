@@ -6,7 +6,6 @@ use App\Http\Entities\Order;
 
 class PaymobRequestMapper
 {
-
     public static function buildOrderRegistration(Order $order, string $token): array
     {
         return [
@@ -42,13 +41,13 @@ class PaymobRequestMapper
                 "email" => $order->getConsumer()->getEmail(),
                 "apartment" => "NA",
                 "floor" => "NA",
-                "street" => $order->getBilling()->getLine1(),
+                "street" => $order->getBilling()->getAddress(),
                 "building" => "NA",
                 "phone_number" => $order->getConsumer()->getPhoneNumber(),
                 "shipping_method" => "NA",
-                "postal_code" => $order->getConsumer()->getFirstName(), //neeeds to be changed
+                "postal_code" => $order->getBilling()->getZipCode(), //neeeds to be changed
                 "city" => $order->getBilling()->getCity(),
-                "country" => $order->getBilling()->getCountryCode(),
+                "country" => $order->getBilling()->getCountry(),
                 "state" => "NA"
             ]
         ];

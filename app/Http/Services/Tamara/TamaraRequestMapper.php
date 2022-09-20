@@ -16,8 +16,8 @@ class TamaraRequestMapper
                 "currency" => $order->getAmount()->currency()
             ],
             "description" => $order->getDescription(),
-            "country_code" => $order->getCountryCode(),
-            "payment_type" => $order->getPaymentType(),
+            "country_code" => $order->getBilling()->getCountryCode(),
+            "payment_type" => $order->getPaymentType()->name,
             "instalments" => NULL,
             "locale" => $order->getLocale(),
             "items" => [
@@ -55,8 +55,8 @@ class TamaraRequestMapper
             "shipping_address" => [
                 "first_name" => $order->getBilling()->getFirstName(),
                 "last_name" => $order->getBilling()->getLastName(),
-                "line1" => $order->getBilling()->getLine1(),
-                "postal_code" => $order->getBilling()->getCountryCode(), //neeeds to be changed
+                "line1" => $order->getBilling()->getAddress(),
+                "postal_code" => $order->getBilling()->getZipCode(),
                 "city" => $order->getBilling()->getCity(),
                 "country_code" => $order->getBilling()->getCountryCode(),
                 "phone_number" => $order->getConsumer()->getPhoneNumber()
@@ -70,12 +70,25 @@ class TamaraRequestMapper
                 "currency" => $order->getAmount()->currency(),
             ],
             "merchant_url" => [
-                "success" => $order->getMerchantUrl()->getSuccessUrl(),
-                "failure" => $order->getMerchantUrl()->getFailureUrl(),
-                "cancel" => $order->getMerchantUrl()->getCancelUrl(),
-                "notification" => $order->getMerchantUrl()->getNotificationUrl()
+                "success" => url(config('tamara.callback_url')),
+                "failure" => url(config('tamara.callback_url')),
+                "cancel" => url(config('tamara.callback_url')),
+                "notification" => url(config('tamara.callback_url'))
             ],
             "expires_in_minutes" => 60,
+        ];
+    }
+
+    public static function mapToPaymentMethodRequest(Order $order): array
+    {
+        return [
+            "country" => $order->getBilling()->getCountryCode(),
+            "order_value" => [
+                "amount" => $order->getAmount()->amount(),
+                "currency" => $order->getAmount()->currency()
+            ],
+            "phone_number" => $order->getConsumer()->getPhoneNumber(),
+            "is_vip" => FALSE
         ];
     }
 }

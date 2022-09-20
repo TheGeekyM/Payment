@@ -9,7 +9,6 @@ use App\Http\Dtos\PaymentTransactionDto;
 use App\Http\Entities\Order;
 use App\Http\Enums\OrderStatuses;
 use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
-use Illuminate\Http\Client\RequestException;
 use Exception;
 
 class TamaraStrategy implements PaymentStrategyInterface
@@ -26,64 +25,47 @@ class TamaraStrategy implements PaymentStrategyInterface
      */
     public function beginTransaction(Order $order): PaymentTransactionDto
     {
-        $request = TamaraRequestMapper::map($order);
-
-        $this->checkIfValidAmount($request);
-        $session = $this->createSession($request);
+        $this->checkIfValidAmount($order);
+        $session = $this->createSession($order);
 
         return new PaymentTransactionDto($session['checkout_url'], ['checkout_id' => $session['checkout_id'],
             'order_id' => $session['order_id']
         ]);
     }
 
-    /**
-     * @throws RequestException
-     */
-    private function checkIfValidAmount(array $data): void
+    private function checkIfValidAmount(Order $order): void
     {
         $check = $this->client->sendAuthorizedRequest(config('tamara.url') . '/checkout/payment-options-pre-check',
-            config('tamara.jwt_token'), 'post', $data);
+            config('tamara.jwt_token'), 'post', TamaraRequestMapper::mapToPaymentMethodRequest($order));
 
         if (!$check['has_available_payment_options']) {
-            throw new RequestException('There are any available payment options for customer with the given order value');
+            throw new \RuntimeException('There are any available payment options for customer with the given order value');
         }
     }
 
-    /**
-     * @throws RequestException
-     */
-    private function createSession(array $request): array
+    private function createSession(Order $order): array
     {
         return $this->client->sendAuthorizedRequest(config('tamara.url') . '/checkout',
-            config('tamara.jwt_token'), 'post', $this->builder->build($request));
+            config('tamara.jwt_token'), 'post', TamaraRequestMapper::map($order));
     }
 
     /**
-     * @throws RequestException
      * @throws Exception
      */
     public function processedCallback(array $data): CallbackDto
     {
-        $response = $this->client->sendAuthorizedRequest("https://api.tabby.ai/api/v2/payments/{$data['payment_id']}",
-            config('tabby.private_key'), 'get');
+        $response = $this->authorizePayment($data['paymentStatus']);
 
-        if (isset($data['status']) && $response['status'] === 'AUTHORIZED') {
-            $response = $this->captureAmount($response['id'], $response['amount']);
-        }
-
-        if (isset($response['status']) && ($response['status'] === 'CLOSED' || $data['status'] === 'AUTHORIZED')) {
-            return new CallbackDto(OrderStatuses::succeeded, $response, $response['id']);
+        if (isset($data['status']) && ($response['status'] === 'fully_captured' || $response['status'] === 'partially_captured') ) {
+            return new CallbackDto(OrderStatuses::succeeded, $response, $response['order_id']);
         }
 
         throw new InvalidPaymentId('Payment Id Id Invalid');
     }
 
-    /**
-     * @throws RequestException
-     */
-    private function captureAmount(string $paymentId, string $amount): array
+    private function authorizePayment(string $paymentId): array
     {
-        return $this->client->sendAuthorizedRequest("https://api.tabby.ai/api/v1/payments/{$paymentId}/captures",
-            config('tabby.private_key'), 'post', ['amount' => $amount]);
+        return $this->client->sendAuthorizedRequest(config('tamara.url') . "/orders/{$paymentId}/authorise",
+            config('tamara.jwt_token'));
     }
 }

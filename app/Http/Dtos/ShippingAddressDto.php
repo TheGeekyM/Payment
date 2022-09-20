@@ -7,11 +7,13 @@ class ShippingAddressDto
     private string $city;
     private string $address;
     private string $zip;
+    private string $country;
 
-    public function __construct(string $city, string $address, string $zip) {
+    public function __construct(string $country, string $city, string $address, string $zip) {
         $this->city = $city;
         $this->address = $address;
         $this->zip = $zip;
+        $this->country = $country;
     }
 
     /**
@@ -36,5 +38,13 @@ class ShippingAddressDto
     public function getZip(): string
     {
         return $this->zip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(): string
+    {
+        return $this->country;
     }
 }

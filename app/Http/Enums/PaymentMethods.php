@@ -21,4 +21,5 @@ enum PaymentMethods
     case NBDPaymob;
     case MashreqPaymob;
     case AllBanksPaymob;
+    case PAY_BY_INSTALMENTS;
 }
