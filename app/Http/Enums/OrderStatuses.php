@@ -3,6 +3,7 @@ namespace App\Http\Enums;
 
 enum OrderStatuses
 {
+    case created;
     case succeeded;
     case captured;
     case voided;

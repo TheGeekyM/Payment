@@ -3,7 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Http\Contracts\PaymentRepositoryInterface;
-use App\Http\Entities\Order;
 use App\Models\Payment;
 
 class PaymentRepository implements PaymentRepositoryInterface

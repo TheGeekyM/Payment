@@ -1,4 +1,3 @@
-
 <div align="center">
   <img alt="Payment logo" src="https://w7.pngwing.com/pngs/519/586/png-transparent-split-payment-credit-card-computer-icons-payment-system-credit-card-angle-hand-payment.png" width="600px" />
 
@@ -10,8 +9,8 @@
 </div>
 
 ## Payment Model
-![Payment demo](https://github.com/geekyHomz/payment/blob/main/modeling.png)
 
+![Payment demo](https://github.com/geekyHomz/payment/blob/main/modeling.png)
 
 ## How To Run The Project
 
@@ -39,6 +38,31 @@ $ php -S localhost:8080 -t public
   ex: `{Payment}Startegy.php` implementing `App\Http\Contracts\PayFortStrategy`
 * Add your payment config in config dir
 
+###### Enums
+
+| Gatewa Name    |   Payment Method	   | 	order statuse	 
+|:---------------|:-------------------:| :----------------: 
+| paymob         |        visa         |    created    
+| payfort        |       credit        |  succeeded   
+| tabby          |        mada         |   captured     
+| tamara         |    banktransfer     |   voided   
+| -------------- |        valu         |  refunded 
+| -------------- |       vfcash        |   failed  
+| -------------- |   cibinstallment    | not_secured 
+| -------------- |    bminstallment    | -------------- 
+| -------------- |    ShahryPaymob     | -------------- 
+| -------------- |     SymplPaymob     | -------------- 
+| -------------- |   SouhoolaPaymob    | -------------- 
+| -------------- |     AudiPaymob      | -------------- 
+| -------------- |      BDCPaymob      | -------------- 
+| -------------- |      NBKPaymob      | -------------- 
+| -------------- |      NBDPaymob      | -------------- 
+| -------------- |    MashreqPaymob    | -------------- 
+| -------------- |   AllBanksPaymob    | -------------- 
+| -------------- | PAY_BY_INSTALMENTS  | -------------- 
+
+<strong>Pay Request</strong>
+
 ```bash
 The optimal request that will be accepted with all payments gateways
 
@@ -48,8 +72,8 @@ Accept: application/json
 Content-Type: application/json
 {
     "payment": {
-        "gateway": "gateway_name", //payfort,paymob,tabby,tamara,...
-        "method": "payment_method_name",//visa,banktransfer,creditcard,...
+        "gateway": "gateway_name", //see gateway name in enums table
+        "method": "payment_method_name",// see gateway method in enums table
     },
     "order": {
         "id": 1420000,
@@ -86,7 +110,33 @@ Content-Type: application/json
 }
 ```
 
+<strong>Response</strong>
+
+```bash
+{
+    "data": {
+        "url": "ifram_url",
+        "params": {
+        }
+    }
+}
+```
+
+<strong>Callback Response</strong>
+
+```bash
+{
+  "data": {
+    "status": "payment_status", see order status in enums table
+    "reference_id": "123423-22Z",
+    "order_id": "47ebdba5-4ae8-4a8f-acce-a04ff1467e63",
+    "data": {}
+    }
+}
+```
+
 ## Test
+
 ``` bash
 $ vendor/bin/phpunit
 ```
