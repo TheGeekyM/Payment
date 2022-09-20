@@ -44,11 +44,11 @@ class PaymentController extends Controller
         $orderRequest = $request->get('order');
         $shippingAddressRequest = $request->get('shipping_address');
 
-        if($paymentRequest['gateway'] === PaymentGateways::tabby->name){
+        if ($paymentRequest['gateway'] === PaymentGateways::tabby->name) {
             $this->validate($request, TabbyValidation::rules());
         }
 
-        if($paymentRequest['gateway'] === PaymentGateways::paymob->name){
+        if ($paymentRequest['gateway'] === PaymentGateways::paymob->name) {
             $this->validate($request, TabbyValidation::rules());
         }
 
@@ -102,6 +102,12 @@ class PaymentController extends Controller
     {
         $paymentGateway = constant(PaymentGateways::class . '::' . $paymentGateway);
         $response = $this->paymentService->processResponse($request->all(), $paymentGateway);
-        return response()->json($response);
+
+        return response()->json(['data' => [
+            'status' => $response->getStatus()->name,
+            'reference_id' => $response->getReferenceId(),
+            'order_id' => $response->getOrderId(),
+            'data' => $response->getData()
+        ]]);
     }
 }

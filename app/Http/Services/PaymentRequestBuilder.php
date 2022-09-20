@@ -78,7 +78,6 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
     private function buildOrder(Customer $consumer, Address $billing, array $orderItemArray): Order
     {
         $order = new Order();
-        $order->setId($this->paymentAssemblerDto->getOrderDto()->getId());
         $order->setReferenceId($this->paymentAssemblerDto->getOrderDto()->getReferenceId());
         $order->setLocale($this->paymentAssemblerDto->getCustomerDto()->getLanguage());
         $order->setAmount(new Money($this->paymentAssemblerDto->getOrderDto()->getAmount(), $this->paymentAssemblerDto->getOrderDto()->getCurrency()));

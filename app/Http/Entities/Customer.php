@@ -7,6 +7,11 @@ class Customer
     /**
      * @var string
      */
+    private string $id;
+
+    /**
+     * @var string
+     */
     private string $phoneNumber;
 
     /**
@@ -96,5 +101,21 @@ class Customer
     public function setFullName(string $fullName): void
     {
         $this->fullName = $fullName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 }

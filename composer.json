@@ -13,8 +13,7 @@
         "guzzlehttp/guzzle": "^7.5",
         "jenssegers/mongodb": "^3.9",
         "laravel/lumen-framework": "^9.0",
-        "ext-curl": "*",
-        "ext-http": "*"
+        "ext-curl": "*"
     },
     "require-dev": {
         "fabpot/goutte": "^4.0",

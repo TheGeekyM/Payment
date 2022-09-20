@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -23,9 +23,10 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
- $app->withFacades();
+$app->withFacades();
 
- $app->withEloquent();
+$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -76,11 +77,8 @@ $app->configure('app');
 |
 */
 
-$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
- $app->middleware([
-     App\Http\Middleware\RequestsAcceptJson::class
- ]);
+$app->middleware([App\Http\Middleware\RequestsAcceptJson::class]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
@@ -97,7 +95,7 @@ $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 |
 */
 
- $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
@@ -116,7 +114,7 @@ $app->router->group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'api',
 ], function ($router) {
-    require __DIR__.'/../routes/api.php';
+    require __DIR__ . '/../routes/api.php';
 });
 
 return $app;

@@ -10,12 +10,6 @@ class Order
     /**
      * @var string
      */
-    private string $id;
-
-
-    /**
-     * @var string
-     */
     private string $referenceId;
 
     /**
@@ -109,9 +103,14 @@ class Order
         $this->shippingAmount = $shippingAmount;
     }
 
+    public function getItems(): array
+    {
+        return $this->orderItemArray;
+    }
+
     public function setItems(array $orderItemArray): void
     {
-        $this->orderItemArray = $orderItemArray;
+        $this->orderItemArray[] = $orderItemArray;
     }
 
     public function setBillingAddress(Address $billing): void
@@ -210,21 +209,5 @@ class Order
     public function getBilling(): Address
     {
         return $this->billing;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
-    {
-        $this->id = $id;
     }
 }

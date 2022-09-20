@@ -9,11 +9,13 @@ class CallbackDto
     private OrderStatuses $status;
     private array $data;
     private string $orderId;
+    private string $referenceId;
 
-    public function __construct(OrderStatuses $status, array $data, string $orderId)
+    public function __construct(OrderStatuses $status, array $data, string $referenceId, string $orderId)
     {
         $this->status = $status;
         $this->data = $data;
+        $this->referenceId = $referenceId;
         $this->orderId = $orderId;
     }
 
@@ -36,8 +38,16 @@ class CallbackDto
     /**
      * @return int
      */
-    public function getOrderId(): int
+    public function getOrderId(): string
     {
         return $this->orderId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferenceId(): string
+    {
+        return $this->referenceId;
     }
 }

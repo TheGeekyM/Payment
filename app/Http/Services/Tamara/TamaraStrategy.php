@@ -54,26 +54,36 @@ class TamaraStrategy implements PaymentStrategyInterface
      */
     public function processedCallback(array $data): CallbackDto
     {
-        if ($data['paymentStatus'] === 'declined') {
-            return new CallbackDto(OrderStatuses::failed, $data, $data['orderId']);
+        if ($data['paymentStatus'] === 'approved') {
+            $this->authorizePayment($data['orderId']);
         }
 
-        if ($data['paymentStatus'] === 'approved') {
-            $response = $this->authorizePayment($data['orderId']);
+        $order = $this->getOrder($data['orderId']);
 
-            if (isset($response['status']) && ($response['status'] === 'fully_captured' || $response['status'] === 'partially_captured')) {
-                return new CallbackDto(OrderStatuses::captured, $response, $response['orderId']);
-            }
+        if ($order['status'] === 'declined') {
+            return new CallbackDto(OrderStatuses::failed, $order, $order['order_reference_id'], $order['order_id']);
+        }
 
-            return new CallbackDto(OrderStatuses::succeeded, $data, $data['orderId']);
+        if ($order['status'] === 'fully_captured' || $order['status'] === 'partially_captured') {
+            return new CallbackDto(OrderStatuses::captured, $order, $order['order_reference_id'], $order['order_id']);
+        }
+
+        if ($order['status'] === 'approved') {
+            return new CallbackDto(OrderStatuses::succeeded, $order, $order['order_reference_id'], $order['order_id']);
         }
 
         throw new InvalidPaymentId('Payment Id Id Invalid');
     }
 
-    private function authorizePayment(string $paymentId): array
+    private function getOrder(string $paymentId): array
     {
-        return $this->client->sendAuthorizedRequest(config('tamara.url') . "/orders/{$paymentId}/authorise",
+        return $this->client->sendAuthorizedRequest(config('tamara.url') . "/orders/{$paymentId}",
+            config('tamara.jwt_token'), 'get');
+    }
+
+    private function authorizePayment(string $paymentId): void
+    {
+        $this->client->sendAuthorizedRequest(config('tamara.url') . "/orders/{$paymentId}/authorise",
             config('tamara.jwt_token'));
     }
 }
