@@ -54,10 +54,18 @@ class TamaraStrategy implements PaymentStrategyInterface
      */
     public function processedCallback(array $data): CallbackDto
     {
-        $response = $this->authorizePayment($data['paymentStatus']);
+        if ($data['paymentStatus'] === 'declined') {
+            return new CallbackDto(OrderStatuses::failed, $data, $data['orderId']);
+        }
 
-        if (isset($data['status']) && ($response['status'] === 'fully_captured' || $response['status'] === 'partially_captured') ) {
-            return new CallbackDto(OrderStatuses::succeeded, $response, $response['order_id']);
+        if ($data['paymentStatus'] === 'approved') {
+            $response = $this->authorizePayment($data['orderId']);
+
+            if (isset($response['status']) && ($response['status'] === 'fully_captured' || $response['status'] === 'partially_captured')) {
+                return new CallbackDto(OrderStatuses::captured, $response, $response['orderId']);
+            }
+
+            return new CallbackDto(OrderStatuses::succeeded, $data, $data['orderId']);
         }
 
         throw new InvalidPaymentId('Payment Id Id Invalid');

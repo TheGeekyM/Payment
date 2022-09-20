@@ -5,7 +5,6 @@ enum PaymentGateways
 {
     case paymob;
     case payfort;
-    case applePay;
     case tabby;
     case tamara;
 }

@@ -20,7 +20,6 @@ class PaymentFactory
             PaymentGateways::payfort  => new PayFortStrategy(new HttpClient(), new Signature()),
             PaymentGateways::tabby    => new TabbyStrategy(new HttpClient()),
             PaymentGateways::tamara   => new TamaraStrategy(new HttpClient()),
-            PaymentGateways::applePay => throw new \Exception('To be implemented'),
         };
     }
 }

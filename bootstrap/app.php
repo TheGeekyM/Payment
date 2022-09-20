@@ -78,9 +78,9 @@ $app->configure('app');
 
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     App\Http\Middleware\RequestsAcceptJson::class
+ ]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,

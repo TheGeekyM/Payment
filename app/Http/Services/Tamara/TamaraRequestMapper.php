@@ -9,8 +9,8 @@ class TamaraRequestMapper
     public static function map(Order $order): array
     {
         return [
-            "order_reference_id" => $order->getOrderReferenceId(),
-            "order_number" => $order->getOrderReferenceId(),
+            "order_reference_id" => $order->getReferenceId(),
+            "order_number" => $order->getReferenceId(),
             "total_amount" => [
                 "amount" => $order->getAmount()->amount(),
                 "currency" => $order->getAmount()->currency()

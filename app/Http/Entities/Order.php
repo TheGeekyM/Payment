@@ -10,7 +10,13 @@ class Order
     /**
      * @var string
      */
-    private string $orderReferenceId;
+    private string $id;
+
+
+    /**
+     * @var string
+     */
+    private string $referenceId;
 
     /**
      * @var string
@@ -62,9 +68,9 @@ class Order
      */
     private Address $billing;
 
-    public function setOrderReferenceId(string $referenceId): void
+    public function setReferenceId(string $referenceId): void
     {
-        $this->orderReferenceId = $referenceId;
+        $this->referenceId = $referenceId;
     }
 
     public function setLocale(string $locale): void
@@ -121,9 +127,9 @@ class Order
     /**
      * @return string
      */
-    public function getOrderReferenceId(): string
+    public function getReferenceId(): string
     {
-        return $this->orderReferenceId;
+        return $this->referenceId;
     }
 
     /**
@@ -204,5 +210,21 @@ class Order
     public function getBilling(): Address
     {
         return $this->billing;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 }

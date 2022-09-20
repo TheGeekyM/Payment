@@ -24,7 +24,7 @@ class TabbyRequestMapper
                     "zip" => $order->getBilling()->getZipCode()
                 ],
                 "order" => [
-                    "reference_id" => $order->getOrderReferenceId(),
+                    "reference_id" => $order->getReferenceId(),
                     "items" => $order->getOrderItemArray()
                 ],
                 "buyer_history" => [
