@@ -73,7 +73,7 @@ Content-Type: application/json
 {
     "payment": {
         "gateway": "gateway_name", //see gateway name in enums table
-        "method": "payment_method_name",// see gateway method in enums table
+        "method": "payment_method_name",//see gateway method in enums table
     },
     "order": {
         "id": 1420000,
@@ -127,7 +127,7 @@ Content-Type: application/json
 ```bash
 {
   "data": {
-    "status": "payment_status", see order status in enums table
+    "status": "payment_status", //see order status in enums table
     "reference_id": "123423-22Z",
     "order_id": "47ebdba5-4ae8-4a8f-acce-a04ff1467e63",
     "data": {}

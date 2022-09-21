@@ -21,7 +21,7 @@ class PaymentAssemblerDummy
     {
         $CreditDto = new CreditDto(4005550000000001, 2505, 123);
         $customerDto = new CustomerDto(1, "Mohamed Emad", "user@user.com", '127.0.0.1', 'en', '01033633939');
-        $shippingAddressDto = new ShippingAddressDto('cairo', 'adress', 1234);
+        $shippingAddressDto = new ShippingAddressDto('egypt', 'cairo', 'address', 1234);
 
         $items = [
             ['id' => 1, 'title' => 'item 1', 'price' => 50],

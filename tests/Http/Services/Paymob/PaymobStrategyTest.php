@@ -5,6 +5,7 @@ namespace Http\Services\Paymob;
 use App\Http\Enums\PaymentGateways;
 use App\Http\Enums\PaymentMethods;
 use App\Http\Libs\HttpClient;
+use App\Http\Services\PaymentRequestBuilder;
 use App\Http\Services\Paymob\PaymobStrategy;
 use App\Http\Services\Paymob\PaymobValidator;
 use Exception;
@@ -21,7 +22,9 @@ class PaymobStrategyTest extends \TestCase
     {
         [, $iframe] = PaymobValidator::validatePayment(PaymentMethods::banktransfer);
         $paymentAssemblerDto = PaymentAssemblerDummy::buildDummyObject(PaymentGateways::paymob, PaymentMethods::banktransfer);
-        $resp = (new PaymobStrategy(new HttpClient()))->beginTransaction($paymentAssemblerDto);
+        $order = (new PaymentRequestBuilder())->build($paymentAssemblerDto);
+
+        $resp = (new PaymobStrategy(new HttpClient()))->beginTransaction($order);
 
         $this->assertStringContainsString("https://accept.paymobsolutions.com/api/acceptance/iframes/{$iframe}", $resp->getUrl());
 
@@ -31,13 +34,15 @@ class PaymobStrategyTest extends \TestCase
     /**
      * @throws Exception
      */
-    public function test_throw_duplicate_order_reference_exception(): void
+    public function throw_duplicate_order_reference_exception(): void
     {
         $this->expectException(RequestException::class);
 
         $paymentAssemblerDto = PaymentAssemblerDummy::buildDummyObject(PaymentGateways::paymob, PaymentMethods::banktransfer);
-        (new PaymobStrategy(new HttpClient()))->beginTransaction($paymentAssemblerDto);
-        (new PaymobStrategy(new HttpClient()))->beginTransaction($paymentAssemblerDto);
+        $order = (new PaymentRequestBuilder())->build($paymentAssemblerDto);
+
+        (new PaymobStrategy(new HttpClient()))->beginTransaction($order);
+        (new PaymobStrategy(new HttpClient()))->beginTransaction($order);
     }
 
     /**
