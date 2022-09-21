@@ -3,6 +3,7 @@
 namespace App\Http\Services\Tamara;
 
 use App\Http\Entities\Order;
+use App\Http\Entities\OrderItem;
 
 class TamaraRequestMapper
 {
@@ -20,32 +21,7 @@ class TamaraRequestMapper
             "payment_type" => $order->getPaymentType()->name,
             "instalments" => NULL,
             "locale" => $order->getLocale(),
-            "items" => [
-                [
-                    "reference_id" => "123456",
-                    "type" => "Digital",
-                    "name" => "Lego City 8601",
-                    "sku" => "SA-12436",
-                    "image_url" => "https://www.example.com/product.jpg",
-                    "quantity" => 1,
-                    "unit_price" => [
-                        "amount" => "50.00",
-                        "currency" => $order->getAmount()->currency()
-                    ],
-                    "discount_amount" => [
-                        "amount" => "50.00",
-                        "currency" => $order->getAmount()->currency()
-                    ],
-                    "tax_amount" => [
-                        "amount" => "50.00",
-                        "currency" => $order->getAmount()->currency()
-                    ],
-                    "total_amount" => [
-                        "amount" => "50.00",
-                        "currency" => $order->getAmount()->currency()
-                    ]
-                ]
-            ],
+            "items" => array_map('self::mapItems', $order->getOrderItemArray()),
             "consumer" => [
                 "first_name" => $order->getConsumer()->getFirstName(),
                 "last_name" => $order->getConsumer()->getLastName(),
@@ -89,6 +65,33 @@ class TamaraRequestMapper
             ],
             "phone_number" => $order->getConsumer()->getPhoneNumber(),
             "is_vip" => FALSE
+        ];
+    }
+
+    public static function mapItems(OrderItem $item): array
+    {
+        return [
+            "reference_id" => $item->getReferenceId(),
+            "type" => $item->getType(),
+            "name" => $item->getName(),
+            "sku" => $item->getSku(),
+            "quantity" => $item->getQuantity(),
+            "unit_price" => [
+                "amount" => "00.00",
+                "currency" => $item->getTotalAmount()->currency()
+            ],
+            "discount_amount" => [
+                "amount" => "00.00",
+                "currency" => $item->getTotalAmount()->currency()
+            ],
+            "tax_amount" => [
+                "amount" => "00.00",
+                "currency" => $item->getTotalAmount()->currency()
+            ],
+            "total_amount" => [
+                "amount" => $item->getTotalAmount()->amount(),
+                "currency" => $item->getTotalAmount()->currency()
+            ]
         ];
     }
 }

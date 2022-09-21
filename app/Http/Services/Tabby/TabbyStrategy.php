@@ -9,7 +9,6 @@ use App\Http\Dtos\PaymentTransactionDto;
 use App\Http\Entities\Order;
 use App\Http\Enums\OrderStatuses;
 use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
-use Illuminate\Http\Client\RequestException;
 use Exception;
 
 class TabbyStrategy implements PaymentStrategyInterface
@@ -33,40 +32,35 @@ class TabbyStrategy implements PaymentStrategyInterface
     }
 
     /**
-     * @throws RequestException
      */
     private function createSession(array $request): array
     {
-        return $this->client->sendAuthorizedRequest('https://api.tabby.ai/api/v2/checkout',
+        return $this->client->sendAuthorizedRequest(config('tabby.url_v2'). '/checkout',
             config('tabby.public_key'), 'post', $request);
     }
 
     /**
-     * @throws RequestException
      * @throws Exception
      */
     public function processedCallback(array $data): CallbackDto
     {
-        $response = $this->client->sendAuthorizedRequest("https://api.tabby.ai/api/v2/payments/{$data['payment_id']}",
+        $response = $this->client->sendAuthorizedRequest(config('tabby.url_v2'). "/payments/{$data['payment_id']}",
             config('tabby.private_key'), 'get');
 
-        if (isset($data['status']) && $response['status'] === 'AUTHORIZED') {
+        if (isset($response['status']) && $response['status'] === 'AUTHORIZED') {
             $response = $this->captureAmount($response['id'], $response['amount']);
         }
 
         if (isset($response['status']) && ($response['status'] === 'CLOSED' || $data['status'] === 'AUTHORIZED')) {
-            return new CallbackDto(OrderStatuses::succeeded, $response, $response['id']);
+            return new CallbackDto(OrderStatuses::succeeded, $response, $response['order']['reference_id'], $response['id']);
         }
 
-        throw new InvalidPaymentId('Invalid Payment Id');
+        throw new InvalidPaymentId('Payment Id is Invalid', 400);
     }
 
-    /**
-     * @throws RequestException
-     */
     private function captureAmount(string $paymentId, string $amount): array
     {
-        return $this->client->sendAuthorizedRequest("https://api.tabby.ai/api/v1/payments/{$paymentId}/captures",
+        return $this->client->sendAuthorizedRequest(config('tabby.url_v2') . "/payments/{$paymentId}/captures",
             config('tabby.private_key'), 'post', ['amount' => $amount]);
     }
 }

@@ -16,6 +16,7 @@ class PaymentValidation
             'order.amount' => 'required|string',
             'order.currency' => 'required|in:SAR,EGP',
             'order.items' => 'required|array',
+            'order.items.*.reference_id' => 'required|string',
             'order.items.*.title' => 'required|string',
             'order.items.*.sku' => 'required|string',
             'order.items.*.quantity' => 'required|integer',

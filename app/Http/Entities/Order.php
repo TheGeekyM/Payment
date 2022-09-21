@@ -110,7 +110,7 @@ class Order
 
     public function setItems(array $orderItemArray): void
     {
-        $this->orderItemArray[] = $orderItemArray;
+        $this->orderItemArray = $orderItemArray;
     }
 
     public function setBillingAddress(Address $billing): void

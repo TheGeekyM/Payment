@@ -6,6 +6,7 @@ use App\Http\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -68,12 +69,11 @@ class Handler extends ExceptionHandler
                 $response['message'] = 'The given data was invalid.';
                 $response['errors'] = $exception->validator->errors()->all();
                 return response()->json($response, 422);
-
             }
 
-            if ($exception instanceof ConnectionException) {
+            if ($exception instanceof ConnectionException ||$exception instanceof RequestException) {
                 $response['message'] = $exception->getMessage();
-                return response()->json($response, 500);
+                return response()->json($response, 400);
             }
 
             if ($exception instanceof NoAvailablePaymentOption) {

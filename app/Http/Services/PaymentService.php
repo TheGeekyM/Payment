@@ -51,7 +51,7 @@ class PaymentService
             if (!$payment->order_id) {
                 $payment->order_id = $callback->getOrderId();
                 $payment->status = $callback->getStatus()->name;
-                $payment->log = $data;
+                $payment->log = $callback->getData();
                 $this->repository->Add($payment);
             }
         }

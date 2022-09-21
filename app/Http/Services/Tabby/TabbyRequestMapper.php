@@ -3,6 +3,7 @@
 namespace App\Http\Services\Tabby;
 
 use App\Http\Entities\Order;
+use App\Http\Entities\OrderItem;
 
 class TabbyRequestMapper
 {
@@ -10,7 +11,7 @@ class TabbyRequestMapper
     {
         return [
             "payment" => [
-                "amount" =>  $order->getAmount()->amount(),
+                "amount" => $order->getAmount()->amount(),
                 "currency" => $order->getAmount()->currency(),
                 'description' => $order->getDescription(),
                 "buyer" => [
@@ -25,7 +26,7 @@ class TabbyRequestMapper
                 ],
                 "order" => [
                     "reference_id" => $order->getReferenceId(),
-                    "items" => $order->getOrderItemArray()
+                    "items" => array_map('self::mapItems', $order->getOrderItemArray())
                 ],
                 "buyer_history" => [
                     "registered_since" => "2019-08-24T14:15:22Z",
@@ -49,4 +50,14 @@ class TabbyRequestMapper
             ]];
     }
 
+    public static function mapItems(OrderItem $item): array
+    {
+        return [
+            "title" => $item->getName(),
+            "quantity" => $item->getQuantity(),
+            "unit_price" => $item->getTotalAmount()->amount(),
+            "reference_id" => $item->getReferenceId(),
+            "category" => $item->getType(),
+        ];
+    }
 }

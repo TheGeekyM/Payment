@@ -36,7 +36,7 @@ class CallbackDto
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getOrderId(): string
     {

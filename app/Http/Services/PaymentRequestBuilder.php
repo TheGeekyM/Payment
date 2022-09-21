@@ -39,9 +39,9 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
             $orderItem->setName($item->getTitle());
             $orderItem->setQuantity(1);
             $orderItem->setType($item->getCategory());
-            $orderItem->setSku('SKU-123');
+            $orderItem->setSku($item->getSku());
             $orderItem->setTotalAmount(new Money($item->getPrice(), $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
-            $orderItem->setReferenceId($item->getId());
+            $orderItem->setReferenceId($item->getReferenceId());
             $orderItemArray[] = $orderItem;
         }
 

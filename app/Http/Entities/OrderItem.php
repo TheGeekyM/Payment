@@ -8,9 +8,9 @@ class OrderItem
 {
 
     /**
-     * @var int
+     * @var string
      */
-    private int $referenceId;
+    private string $referenceId;
 
     /**
      * @var Money
@@ -88,8 +88,72 @@ class OrderItem
         $this->DdscountAmount = $discountAmount;
     }
 
-    public function setReferenceId(int $referenceId): void
+    public function setReferenceId(string $referenceId): void
     {
         $this->referenceId = $referenceId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getUnitPrice(): Money
+    {
+        return $this->unitPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSku(): string
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getTotalAmount(): Money
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getTaxAmount(): Money
+    {
+        return $this->taxAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferenceId(): string
+    {
+        return $this->referenceId;
     }
 }

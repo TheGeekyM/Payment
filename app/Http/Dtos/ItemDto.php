@@ -5,15 +5,15 @@ namespace App\Http\Dtos;
 class ItemDto
 {
     private float $price;
-    private int $id;
+    private string $referenceId;
     private string $title;
     private int $quantity;
     private string $category;
     private ?string $sku;
 
-    public function __construct(int $id, string $title, string $sku = '', float $price = 0, int $quantity = 1, string $category = 'product')
+    public function __construct(string $referenceId, string $title, string $sku = '', float $price = 0, int $quantity = 1, string $category = 'product')
     {
-        $this->id = $id;
+        $this->referenceId = $referenceId;
         $this->title = $title;
         $this->sku = $sku;
         $this->price = $price;
@@ -30,11 +30,11 @@ class ItemDto
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getReferenceId(): string
     {
-        return $this->id;
+        return $this->referenceId;
     }
 
     /**
