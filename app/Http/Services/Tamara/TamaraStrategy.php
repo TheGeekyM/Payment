@@ -9,6 +9,7 @@ use App\Http\Dtos\PaymentTransactionDto;
 use App\Http\Entities\Order;
 use App\Http\Enums\OrderStatuses;
 use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
+use App\Http\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Exception;
 
 class TamaraStrategy implements PaymentStrategyInterface
@@ -33,13 +34,16 @@ class TamaraStrategy implements PaymentStrategyInterface
         ]);
     }
 
+    /**
+     * @throws NoAvailablePaymentOption
+     */
     private function checkIfValidAmount(Order $order): void
     {
         $check = $this->client->sendAuthorizedRequest(config('tamara.url') . '/checkout/payment-options-pre-check',
             config('tamara.jwt_token'), 'post', TamaraRequestMapper::mapToPaymentMethodRequest($order));
 
         if (!$check['has_available_payment_options']) {
-            throw new \RuntimeException('There are any available payment options for customer with the given order value');
+            throw new NoAvailablePaymentOption('There are any available payment options for customer with the given order value', 400);
         }
     }
 

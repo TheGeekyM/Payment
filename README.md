@@ -96,10 +96,7 @@ Content-Type: application/json
         "phone": "500000001",
         "name": "Mohamed Emad",
         "email": "email@domain.com",
-        "language": "en",
-        "card_number": 4005550000000001,
-        "expiry_date": 2505,
-        "card_security_code": 123
+        "language": "en"
     },
     "shipping_address": {
         "country": "egypt",
@@ -110,19 +107,19 @@ Content-Type: application/json
 }
 ```
 
-<strong>Response</strong>
+<strong>Response 200</strong>
 
 ```bash
 {
     "data": {
-        "url": "ifram_url",
+        "url": "iframe_url",
         "params": {
         }
     }
 }
 ```
 
-<strong>Callback Response</strong>
+<strong>Callback Response 200</strong>
 
 ```bash
 {
@@ -134,6 +131,32 @@ Content-Type: application/json
     }
 }
 ```
+
+## Error Responses
+
+>500: Something bad happened. We're notified.
+
+>```json{
+> {
+>    "message": "string."
+> }
+ 
+> 400: failure.
+> ```json{ 
+> {
+>    "message": "string."
+> }
+
+> 422: validation error. One of the required fields is missing or request is not formatted correctly.
+> ```json{ 
+> {
+>    "message": "The given data was invalid.",
+>    "errors": [
+>         "The xxxx field is required.",
+>         "The xxxx field is required.",
+>    ]
+> }
+> ```
 
 ## Test
 

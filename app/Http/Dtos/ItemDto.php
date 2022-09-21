@@ -9,11 +9,13 @@ class ItemDto
     private string $title;
     private int $quantity;
     private string $category;
+    private ?string $sku;
 
-    public function __construct(int $id, string $title, float $price = 0, int $quantity = 1, string $category = 'product')
+    public function __construct(int $id, string $title, string $sku = '', float $price = 0, int $quantity = 1, string $category = 'product')
     {
         $this->id = $id;
         $this->title = $title;
+        $this->sku = $sku;
         $this->price = $price;
         $this->quantity = $quantity;
         $this->category = $category;
@@ -57,5 +59,13 @@ class ItemDto
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSku(): ?string
+    {
+        return $this->sku;
     }
 }
