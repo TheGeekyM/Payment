@@ -31,12 +31,15 @@ class PaymobStrategy implements PaymentStrategyInterface
         $registeredOrder = $this->registerOrder($order, $auth['token']);
         $paymentKey = $this->requestPaymentKey($order, $auth['token'], $registeredOrder['id'], $integrationId);
 
-        return new PaymentTransactionDto("https://accept.paymobsolutions.com/api/acceptance/iframes/{$iframe}?payment_token={$paymentKey['token']}", []);
+        return new PaymentTransactionDto(
+            config('paymob.url') . "acceptance/iframes/{$iframe}?payment_token={$paymentKey['token']}", []
+        );
     }
 
     private function authenticationRequest(): array
     {
-        return $this->client->sendRequest(config('paymob.url') . 'auth/tokens', ['api_key' => config('paymob.api_key')]);
+        return $this->client->sendRequest(config('paymob.url') . 'auth/tokens',
+            ['api_key' => config('paymob.api_key')]);
     }
 
     private function registerOrder(Order $order, string $token): array

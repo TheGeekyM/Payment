@@ -19,3 +19,4 @@ $router->get('/', function () use ($router) {
 
 $router->get('api/pay','PaymentController@pay');
 $router->get('api/pay/{paymentGateway}/callback','PaymentController@callback');
+$router->post('api/pay/{paymentGateway}/callback','PaymentController@callback');

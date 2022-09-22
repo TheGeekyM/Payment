@@ -15,19 +15,6 @@ class PaymobValidator
     {
         return match ($paymentMethod) {
             PaymentMethods::banktransfer   => [config('paymob.integration_id'), 563811],
-            PaymentMethods::valu           => [config('paymob.integration_id'), 5638110],
-            PaymentMethods::vfcash         => [config('paymob.integration_id'), 5638112],
-            PaymentMethods::cibinstallment => [config('paymob.integration_id'), 5638115],
-            PaymentMethods::bminstallment  => [config('paymob.integration_id'), 5638114],
-            PaymentMethods::ShahryPaymob   => [config('paymob.integration_id'), 45],
-            PaymentMethods::SymplPaymob    => [config('paymob.integration_id'), 5638116],
-            PaymentMethods::SouhoolaPaymob => [config('paymob.integration_id'), 5638117],
-            PaymentMethods::AudiPaymob     => [config('paymob.integration_id'), 56385],
-            PaymentMethods::BDCPaymob      => [config('paymob.integration_id'), 56341],
-            PaymentMethods::NBKPaymob      => [config('paymob.integration_id'), 56611],
-            PaymentMethods::NBDPaymob      => [config('paymob.integration_id'), 7811],
-            PaymentMethods::MashreqPaymob  => [config('paymob.integration_id'), 5511],
-            PaymentMethods::AllBanksPaymob => [config('paymob.integration_id'), 5661],
             default                        => throw new UnsupportedPaymentMethod('Unsupported paymob method')
         };
     }

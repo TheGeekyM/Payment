@@ -11,7 +11,7 @@ class ItemDto
     private string $category;
     private ?string $sku;
 
-    public function __construct(string $referenceId, string $title, string $sku = '', float $price = 0, int $quantity = 1, string $category = 'product')
+    public function __construct(string $referenceId, string $title, float $price = 0, int $quantity = 1, string $category = 'product', string $sku = '',)
     {
         $this->referenceId = $referenceId;
         $this->title = $title;

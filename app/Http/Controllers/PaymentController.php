@@ -54,7 +54,7 @@ class PaymentController extends Controller
         $paymentDto = new PaymentDto($paymentGateway, $paymentMethod);
 
         $itemsDto = collect($orderRequest['items'])->transform(function ($item) {
-            return new ItemDto($item['reference_id'], $item['title'], $item['sku'], $item['price'], $item['quantity'], $item['category']);
+            return new ItemDto($item['reference_id'], $item['title'], $item['price'], $item['sku'], $item['quantity'], $item['category']);
         })->toArray();
 
         $OrderDto = new OrderDto(
