@@ -3,6 +3,7 @@
 namespace App\Http\Services\Paymob;
 
 use App\Http\Entities\Order;
+use App\Http\Entities\OrderItem;
 
 class PaymobRequestMapper
 {
@@ -11,17 +12,11 @@ class PaymobRequestMapper
         return [
             'auth_token' => $token,
             "amount_cents" => $order->getAmount()->amount(),
+            "merchant_order_id" => $order->getReferenceId(),
             "delivery_needed" => "false",
             'currency' => $order->getAmount()->currency(),
             'notify_user_with_email' => TRUE,
-            "items" => [
-                [
-                    "name" => "ASC1515",
-                    "amount_cents" => 100,
-                    "description" => "Smart Watch",
-                    "quantity" => "1"
-                ]
-            ],
+            "items" => array_map('self::mapItems', $order->getOrderItemArray())
         ];
     }
 
@@ -45,11 +40,21 @@ class PaymobRequestMapper
                 "building" => "NA",
                 "phone_number" => $order->getConsumer()->getPhoneNumber(),
                 "shipping_method" => "NA",
-                "postal_code" => $order->getBilling()->getZipCode(), //neeeds to be changed
+                "postal_code" => $order->getBilling()->getZipCode(),
                 "city" => $order->getBilling()->getCity(),
                 "country" => $order->getBilling()->getCountry(),
                 "state" => "NA"
             ]
+        ];
+    }
+
+    public static function mapItems(OrderItem $item): array
+    {
+        return [
+            "name" => $item->getName(),
+            "description" => '',
+            "quantity" => $item->getQuantity(),
+            "amount_cents" => $item->getTotalAmount()->amount(),
         ];
     }
 }

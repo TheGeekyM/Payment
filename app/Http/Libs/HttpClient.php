@@ -14,7 +14,7 @@ class HttpClient implements HttpClientInterface
      */
     public function sendRequest(string $endpoint, ?array $params = [], string $method = 'post', ?array $headers = []): array
     {
-        $response = Http::contentType('application/json')->withHeaders($headers)
+        $response = Http::contentType('application/json')
             ->{$method}($endpoint, $params);
 
         $response->throw();

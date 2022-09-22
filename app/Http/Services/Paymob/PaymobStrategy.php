@@ -33,21 +33,22 @@ class PaymobStrategy implements PaymentStrategyInterface
 
         return new PaymentTransactionDto("https://accept.paymobsolutions.com/api/acceptance/iframes/{$iframe}?payment_token={$paymentKey['token']}", []);
     }
+
     private function authenticationRequest(): array
     {
-        return $this->client->sendRequest(config('paymob.auth_url'), ['api_key' => config('paymob.api_key')]);
+        return $this->client->sendRequest(config('paymob.url') . 'auth/tokens', ['api_key' => config('paymob.api_key')]);
     }
 
     private function registerOrder(Order $order, string $token): array
     {
         $request = PaymobRequestMapper::buildOrderRegistration($order, $token);
-        return $this->client->sendRequest(config('paymob.order_registration_url'), $request);
+        return $this->client->sendRequest(config('paymob.url') . 'ecommerce/orders', $request);
     }
 
     private function requestPaymentKey(Order $order, string $token, int $orderId, int $integrationId): array
     {
         $request = PaymobRequestMapper::buildPaymentKeyRequest($order, $token, $orderId, $integrationId);
-        return $this->client->sendRequest(config('paymob.payment_key_url'),$request);
+        return $this->client->sendRequest(config('paymob.url') . 'acceptance/payment_keys', $request);
     }
 
     /**
@@ -55,22 +56,25 @@ class PaymobStrategy implements PaymentStrategyInterface
      */
     public function processedCallback(array $data): CallbackDto
     {
+        $obj = $data['obj'];
+        $order = $obj['order'];
+
         if (!PaymobValidator::validateResponse($data)) {
             throw new UnsecureCallback('Invalid response received');
         }
 
-        if ($data['success'] && !$data['is_voided'] && !$data['is_refunded']) {
-            return new CallbackDto(OrderStatuses::succeeded, $data, $data['id']);
+        if ($obj['success'] && !$obj['is_voided'] && !$obj['is_refunded']) {
+            return new CallbackDto(OrderStatuses::succeeded, $data, $order['merchant_order_id'], $order['id']);
         }
 
-        if ($data['success'] && $data['is_voided']) {
-            return new CallbackDto(OrderStatuses::voided, $data, $data['id']);
+        if ($obj['success'] && $obj['is_voided']) {
+            return new CallbackDto(OrderStatuses::voided, $data, $order['merchant_order_id'], $order['id']);
         }
 
-        if ($data['success'] && $data['is_refunded']) {
-            return new CallbackDto(OrderStatuses::refunded, $data, $data['id']);
+        if ($obj['success'] && $obj['is_refunded']) {
+            return new CallbackDto(OrderStatuses::refunded, $data, $order['merchant_order_id'], $order['id']);
         }
 
-        return new CallbackDto(OrderStatuses::failed, $data, $data['id']);
+        return new CallbackDto(OrderStatuses::failed, $data, $order['merchant_order_id'], $order['id']);
     }
 }

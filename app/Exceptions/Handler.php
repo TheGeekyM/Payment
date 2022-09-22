@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
 use App\Http\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -71,12 +72,12 @@ class Handler extends ExceptionHandler
                 return response()->json($response, 422);
             }
 
-            if ($exception instanceof ConnectionException ||$exception instanceof RequestException) {
-                $response['message'] = $exception->getMessage();
-                return response()->json($response, 400);
-            }
-
-            if ($exception instanceof NoAvailablePaymentOption) {
+            if (
+                $exception instanceof ConnectionException ||
+                $exception instanceof RequestException ||
+                $exception instanceof InvalidPaymentId ||
+                $exception instanceof NoAvailablePaymentOption
+            ) {
                 $response['message'] = $exception->getMessage();
                 return response()->json($response, 400);
             }

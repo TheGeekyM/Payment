@@ -15,7 +15,7 @@ class PaymentRepository implements PaymentRepositoryInterface
 
     public function get(string $id): Payment
     {
-        return Payment::where('reference_id', $id)->first();
+        return Payment::where('reference_id', $id)->firstOrFail();
     }
 
     public function getAll(): array
