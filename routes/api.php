@@ -20,6 +20,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['middleware' => 'encrypter'], function ($router) {
     $router->get('api/pay', 'PaymentController@pay');
-    $router->get('api/pay/{paymentGateway}/callback', 'PaymentController@callback');
-    $router->post('api/pay/{paymentGateway}/callback', 'PaymentController@callback');
 });
+
+$router->get('api/pay/{paymentGateway}/callback', 'PaymentController@callback');
+$router->post('api/pay/{paymentGateway}/callback', 'PaymentController@callback');

@@ -40,12 +40,12 @@ class PaymentController extends Controller
      */
     public function pay(Request $request): JsonResponse
     {
+        $this->validate($request, PaymentValidation::rules());
+
         $paymentRequest = $request->get('payment');
         $customerRequest = $request->get('customer');
         $orderRequest = $request->get('order');
         $shippingAddressRequest = $request->get('shipping_address');
-
-        $this->validate($request, PaymentValidation::rules());
 
         $paymentGateway = constant(PaymentGateways::class . "::" . $paymentRequest['gateway']);
         $paymentMethod = constant(PaymentMethods::class . "::" . $paymentRequest['method']);

@@ -24,7 +24,11 @@ class RequestEncrypter
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->has('data')) {
+        if (config('app.env') !== 'local') {
+            if (!$request->has('data')) {
+                throw new \InvalidArgumentException('Request data is required', 422);
+            }
+
             $request->request->add($this->encrypter->decrypt($request->request->get('data')));
             $request->request->remove('data');
         }

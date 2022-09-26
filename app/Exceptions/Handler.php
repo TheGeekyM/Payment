@@ -71,6 +71,11 @@ class Handler extends ExceptionHandler
                 return response()->json($response, 422);
             }
 
+            if ($exception instanceof \InvalidArgumentException) {
+                $response['message'] = $exception->getMessage();
+                return response()->json($response, 422);
+            }
+
             if (
                 $exception instanceof ConnectionException ||
                 $exception instanceof RequestException ||
