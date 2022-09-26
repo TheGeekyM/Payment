@@ -1,19 +1,14 @@
 <?php
 
-namespace Libs;
+namespace UnitTests\Payment\Doubles\Dummies;
 
-use Payment\Libs\Encrypter;
-
-class EncrypterTest extends \TestCase
+class PaymentRequest
 {
-    /**
-     * @throws \Exception
-     */
-    public function test_can_encrypt_and_decrypt_data(): void
+    public static function getOptimalRequest(string $gateway)
     {
-        $data = [
+        return [
             "payment" => [
-                "gateway" => "paymob",
+                "gateway" => $gateway,
                 "method" => "banktransfer"
             ],
             "order" => [
@@ -54,14 +49,5 @@ class EncrypterTest extends \TestCase
                 "zip" => "1234"
             ]
         ];
-
-        $encrypter = new Encrypter(config('encryption.key'), 'aes-256-gcm');
-        $encryptedData = $encrypter->encrypt($data);
-        $decryptedData = $encrypter->decrypt($encryptedData);
-
-        $this->assertStringContainsString('eyJpdiI6', $encryptedData);
-        $this->assertIsArray($decryptedData);
-
-        $resp = $this->call('get', 'api/pay',[]);
     }
 }

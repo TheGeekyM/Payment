@@ -77,12 +77,12 @@ $app->configure('app');
 |
 */
 
-
 $app->middleware([App\Http\Middleware\RequestsAcceptJson::class]);
 
-// $app->routeMiddleware([
+$app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+    'encrypter' => App\Http\Middleware\RequestEncrypter::class
+]);
 
 /*
 |--------------------------------------------------------------------------

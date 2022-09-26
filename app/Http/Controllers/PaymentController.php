@@ -47,7 +47,6 @@ class PaymentController extends Controller
 
         $this->validate($request, PaymentValidation::rules());
 
-
         $paymentGateway = constant(PaymentGateways::class . "::" . $paymentRequest['gateway']);
         $paymentMethod = constant(PaymentMethods::class . "::" . $paymentRequest['method']);
 
