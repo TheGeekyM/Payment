@@ -32,8 +32,8 @@ $ php -S localhost:8080 -t public
 
 ## How To Use
 
-* Add your payment in `App\Http\Enums\PaymentGateways Enum`
-* Add your payment in `App\Http\Factories\PaymentFactory`
+* Add your payment in `Payment\Enums\PaymentGateways Enum`
+* Add your payment in `Payment\Factories\PaymentFactory`
 * Add your payment domain model in `App\Http\Services\[payment-dir]` with at minimum one class
   ex: `{Payment}Startegy.php` implementing `App\Http\Contracts\PayFortStrategy`
 * Add your payment config in config dir

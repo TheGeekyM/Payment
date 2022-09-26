@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use App\Http\Services\Tabby\Exceptions\InvalidPaymentId;
-use App\Http\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\ConnectionException;
@@ -13,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Payment\Services\Tabby\Exceptions\InvalidPaymentId;
+use Payment\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -57,7 +57,6 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($request->expectsJson()) {
-
             if (config('app.debug')) {
                 $response['message'] = $exception->getMessage();
                 $response['exception'] = get_class($exception);

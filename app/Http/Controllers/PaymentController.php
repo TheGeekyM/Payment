@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Dtos\CreditDto;
-use App\Http\Dtos\CustomerDto;
-use App\Http\Dtos\ItemDto;
-use App\Http\Dtos\OrderDto;
-use App\Http\Dtos\PaymentDto;
-use App\Http\Dtos\PaymentAssemblerDto;
-use App\Http\Dtos\ShippingAddressDto;
-use App\Http\Enums\PaymentGateways;
-use App\Http\Enums\PaymentMethods;
-use App\Http\Services\PaymentService;
 use App\Http\Validations\PaymentValidation;
-use App\Http\Validations\TabbyValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Payment\Dtos\CustomerDto;
+use Payment\Dtos\ItemDto;
+use Payment\Dtos\OrderDto;
+use Payment\Dtos\PaymentAssemblerDto;
+use Payment\Dtos\PaymentDto;
+use Payment\Dtos\ShippingAddressDto;
+use Payment\Enums\PaymentGateways;
+use Payment\Enums\PaymentMethods;
+use Payment\Services\PaymentService;
 
 class PaymentController extends Controller
 {
@@ -36,6 +34,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
      * @throws ValidationException
      */
     public function pay(Request $request): JsonResponse
@@ -93,6 +93,11 @@ class PaymentController extends Controller
         return response()->json(['data' => ['url' => $response->getUrl(), 'params' => $response->getParams()]]);
     }
 
+    /**
+     * @param Request $request
+     * @param string $paymentGateway
+     * @return JsonResponse
+     */
     public function callback(Request $request, string $paymentGateway): JsonResponse
     {
         $paymentGateway = constant(PaymentGateways::class . '::' . $paymentGateway);

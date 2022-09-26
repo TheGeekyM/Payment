@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\Contracts\PaymentRepositoryInterface;
-use App\Http\Contracts\PaymentRequestBuilderInterface;
-use App\Http\Repository\PaymentRepository;
-use App\Http\Services\PaymentRequestBuilder;
+use Payment\Contracts\PaymentRepositoryInterface;
+use Payment\Contracts\PaymentRequestBuilderInterface;
 use Illuminate\Support\ServiceProvider;
+use Payment\Repository\PaymentRepository;
+use Payment\Services\PaymentRequestBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
