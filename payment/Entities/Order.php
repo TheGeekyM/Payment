@@ -18,7 +18,7 @@ class Order
     private string $locale;
 
     /**
-     * @var \Payment\ValueObjects\Money
+     * @var Money
      */
     private Money $amount;
 
@@ -38,12 +38,12 @@ class Order
     private string $description;
 
     /**
-     * @var \Payment\ValueObjects\Money
+     * @var Money
      */
     private Money $shippingAmount;
 
     /**
-     * @var \Payment\ValueObjects\Money
+     * @var Money
      */
     private Money $taxAmount;
 
@@ -148,7 +148,7 @@ class Order
     }
 
     /**
-     * @return \Payment\Enums\PaymentMethods
+     * @return PaymentMethods
      */
     public function getPaymentType(): PaymentMethods
     {

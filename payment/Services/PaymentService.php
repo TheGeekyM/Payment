@@ -2,12 +2,12 @@
 
 namespace Payment\Services;
 
-use App\Models\Payment;
 use Payment\Contracts\PaymentRepositoryInterface;
 use Payment\Contracts\PaymentRequestBuilderInterface;
 use Payment\Dtos\CallbackDto;
 use Payment\Dtos\PaymentAssemblerDto;
 use Payment\Dtos\PaymentTransactionDto;
+use Payment\Entities\Payment;
 use Payment\Enums\PaymentGateways;
 use Payment\Factories\PaymentFactory;
 
@@ -28,14 +28,16 @@ class PaymentService
 
         {
             $payment = new Payment();
-            $payment->reference_id = $paymentDto->getOrderDto()->getReferenceId();
-            $payment->status = 'created';
-            $payment->user_id = $paymentDto->getCustomerDto()->getId();
-            $payment->total_amount = $paymentDto->getOrderDto()->getAmount();
-            $payment->payment_gateway = $paymentDto->getPaymentDto()->getPaymentGateway()->name;
-            $payment->payment_method = $paymentDto->getPaymentDto()->getPaymentMethod()->name;
+            $payment->setReferenceId($order->getReferenceId());
+            $payment->setStatus('created');
+            $payment->setUserId($order->getConsumer()->getId());
+            $payment->setTotalAmount($order->getAmount()->amount());
+            $payment->setPaymentGateway($order->getPaymentType()->name);
+            $payment->setPaymentMethod($order->getPaymentType()->name);
             $this->repository->Add($payment);
         }
+
+        $this->repository->Add($payment);
 
         return PaymentFactory::getInstance($paymentDto->getPaymentDto()->getPaymentGateway())
             ->beginTransaction($order);
@@ -46,12 +48,12 @@ class PaymentService
         $callback = PaymentFactory::getInstance($paymentGateway)->processedCallback($data);
 
         {
-            $payment = $this->repository->get($callback->getReferenceId());
+            $payment = $this->repository->findBy('reference_id', $callback->getReferenceId());
 
-            if (!$payment->order_id) {
-                $payment->order_id = $callback->getOrderId();
-                $payment->status = $callback->getStatus()->name;
-                $payment->log = $callback->getData();
+            if (!$payment->getOrderId()) {
+                $payment->setOrderId( $callback->getOrderId());
+                $payment->setStatus($callback->getStatus()->name);
+                $payment->setLog($callback->getData());
                 $this->repository->Add($payment);
             }
         }

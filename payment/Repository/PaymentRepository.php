@@ -2,8 +2,11 @@
 
 namespace Payment\Repository;
 
-use App\Models\Payment;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Payment\Contracts\PaymentRepositoryInterface;
+use Payment\Entities\Order;
+use Payment\Entities\Payment;
 
 class PaymentRepository implements PaymentRepositoryInterface
 {
@@ -13,18 +16,23 @@ class PaymentRepository implements PaymentRepositoryInterface
         return $payment;
     }
 
-    public function get(string $id): Payment
+    public function find(string $id): Payment
     {
-        return Payment::where('reference_id', $id)->firstOrFail();
+        return Payment::find($id)->first();
+    }
+
+    public function findBy(string $column, mixed $value): Payment
+    {
+        return Payment::where($column, $value)->first();
     }
 
     public function getAll(): array
     {
-        // TODO: Implement getAll() method.
+        return Payment::all()->toArray();
     }
 
     public function delete(int $id): void
     {
-        // TODO: Implement delete() method.
+        Payment::destroy($id);
     }
 }

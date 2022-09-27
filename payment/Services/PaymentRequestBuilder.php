@@ -66,6 +66,7 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
     private function buildCustomer(): Customer
     {
         $consumer = new Customer();
+        $consumer->setId('dd5d5'); //todo needs to be updated
         $consumer->setFullName($this->paymentAssemblerDto->getCustomerDto()->getName());
         $consumer->setFirstName($this->paymentAssemblerDto->getCustomerDto()->getName());
         $consumer->setLastName($this->paymentAssemblerDto->getCustomerDto()->getName());

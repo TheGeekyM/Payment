@@ -2,11 +2,14 @@
 
 namespace Payment\Contracts;
 
-use App\Models\Payment;
+use Payment\Entities\Order;
+use Payment\Entities\Payment;
 
 interface PaymentRepositoryInterface
 {
-    public function get(string $id): Payment;
+    public function find(string $id): Payment;
+
+    public function findBy(string $column, mixed $value): Payment;
 
     public function getAll(): array;
 
