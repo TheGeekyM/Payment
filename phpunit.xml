@@ -18,7 +18,7 @@
     </testsuites>
     <coverage cacheDirectory=".phpunit.cache/code-coverage" processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">app</directory>
+            <directory suffix=".php">payment</directory>
         </include>
         <report>
             <clover outputFile="./tests/logs/clover.xml"/>

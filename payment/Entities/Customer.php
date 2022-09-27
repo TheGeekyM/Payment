@@ -34,6 +34,11 @@ class Customer
      */
     private string $firstName;
 
+    /**
+     * @var string
+     */
+    private string $ip;
+
     public function setFirstName(string $firstName): void
     {
         $this->firstName = $firstName;
@@ -92,15 +97,7 @@ class Customer
      */
     public function getFullName(): string
     {
-        return $this->fullName;
-    }
-
-    /**
-     * @param string $fullName
-     */
-    public function setFullName(string $fullName): void
-    {
-        $this->fullName = $fullName;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     /**
@@ -117,5 +114,18 @@ class Customer
     public function setId(string $id): void
     {
         $this->id = $id;
+    }
+
+    public function setIp(string $ip): void
+    {
+        $this->ip = $ip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIp(): string
+    {
+        return $this->ip;
     }
 }

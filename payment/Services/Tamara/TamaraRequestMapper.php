@@ -18,10 +18,10 @@ class TamaraRequestMapper
             ],
             "description" => $order->getDescription(),
             "country_code" => $order->getBilling()->getCountryCode(),
-            "payment_type" => $order->getPaymentType()->name,
+            "payment_type" => $order->getPaymentMethod()->name,
             "instalments" => NULL,
             "locale" => $order->getLocale(),
-            "items" => array_map('self::mapItems', $order->getOrderItemArray()),
+            "items" => array_map('self::mapItems', $order->getItems()),
             "consumer" => [
                 "first_name" => $order->getConsumer()->getFirstName(),
                 "last_name" => $order->getConsumer()->getLastName(),

@@ -16,7 +16,7 @@ class PaymobRequestMapper
             "delivery_needed" => "false",
             'currency' => $order->getAmount()->currency(),
             'notify_user_with_email' => TRUE,
-            "items" => array_map('self::mapItems', $order->getOrderItemArray())
+            "items" => array_map('self::mapItems', $order->getItems())
         ];
     }
 

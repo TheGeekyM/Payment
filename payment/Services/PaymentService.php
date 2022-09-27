@@ -31,9 +31,10 @@ class PaymentService
             $payment->setReferenceId($order->getReferenceId());
             $payment->setStatus('created');
             $payment->setUserId($order->getConsumer()->getId());
-            $payment->setTotalAmount($order->getAmount()->amount());
-            $payment->setPaymentGateway($order->getPaymentType()->name);
-            $payment->setPaymentMethod($order->getPaymentType()->name);
+            $payment->setTotalAmount($order->calculateTotalAmount()->amount());
+            $payment->setCurrency($order->calculateTotalAmount()->currency());
+            $payment->setPaymentGateway($order->getPaymentGateway());
+            $payment->setPaymentMethod($order->getPaymentMethod());
             $this->repository->Add($payment);
         }
 

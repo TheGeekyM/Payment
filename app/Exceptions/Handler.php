@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Payment\Entities\Exceptions\InvalidTotalOrderAmountException;
 use Payment\Services\Tabby\Exceptions\InvalidPaymentId;
 use Payment\Services\Tamara\Exceptions\NoAvailablePaymentOption;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -75,7 +76,8 @@ class Handler extends ExceptionHandler
                 $exception instanceof ConnectionException ||
                 $exception instanceof RequestException ||
                 $exception instanceof InvalidPaymentId ||
-                $exception instanceof NoAvailablePaymentOption
+                $exception instanceof NoAvailablePaymentOption ||
+                $exception instanceof InvalidTotalOrderAmountException
             ) {
                 $response['message'] = $exception->getMessage();
                 return response()->json($response, 400);

@@ -4,6 +4,8 @@ namespace Payment\Entities;
 
 use DateTime;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Payment\Enums\PaymentGateways;
+use Payment\Enums\PaymentMethods;
 
 class Payment extends Model
 {
@@ -28,14 +30,14 @@ class Payment extends Model
     private string $total_amount;
 
     /**
-     * @var string
+     * @var PaymentGateways
      */
-    private string $payment_gateway;
+    private PaymentGateways $payment_gateway;
 
     /**
-     * @var string
+     * @var PaymentGateways
      */
-    private string $payment_method;
+    private PaymentMethods $payment_method;
 
     /**
      * @var string|null
@@ -56,6 +58,11 @@ class Payment extends Model
      * @var DateTime
      */
     private DateTime $created_at;
+
+    /**
+     * @var string
+     */
+    private string $currency;
 
     /**
      * @param string $reference_id
@@ -91,18 +98,18 @@ class Payment extends Model
 
 
     /**
-     * @return string
+     * @return PaymentMethods
      */
-    public function getPaymentMethod(): string
+    public function getPaymentMethod(): PaymentMethods
     {
         return $this->payment_method;
     }
 
 
     /**
-     * @param string $payment_method
+     * @param PaymentMethods $payment_method
      */
-    public function setPaymentMethod(string $payment_method): void
+    public function setPaymentMethod(PaymentMethods $payment_method): void
     {
         $this->payment_method = $payment_method;
     }
@@ -156,17 +163,17 @@ class Payment extends Model
     }
 
     /**
-     * @param string $payment_gateway
+     * @param PaymentGateways $payment_gateway
      */
-    public function setPaymentGateway(string $payment_gateway): void
+    public function setPaymentGateway(PaymentGateways $payment_gateway): void
     {
         $this->payment_gateway = $payment_gateway;
     }
 
     /**
-     * @return string
+     * @return PaymentGateways
      */
-    public function getPaymentGateway(): string
+    public function getPaymentGateway(): PaymentGateways
     {
         return $this->payment_gateway;
     }
@@ -187,7 +194,11 @@ class Payment extends Model
         return $this->order_id;
     }
 
-    public function setLog(array $log)
+    /**
+     * @param array $log
+     * @return void
+     */
+    public function setLog(array $log): void
     {
         $this->log = $log;
     }
@@ -200,5 +211,12 @@ class Payment extends Model
         return $this->log;
     }
 
-
+    /**
+     * @param string $currency
+     * @return void
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
 }

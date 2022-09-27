@@ -26,7 +26,7 @@ class TabbyRequestMapper
                 ],
                 "order" => [
                     "reference_id" => $order->getReferenceId(),
-                    "items" => array_map('self::mapItems', $order->getOrderItemArray())
+                    "items" => array_map('self::mapItems', $order->getItems())
                 ],
                 "buyer_history" => [
                     "registered_since" => "2019-08-24T14:15:22Z",

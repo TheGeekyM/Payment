@@ -31,6 +31,39 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         return $this->buildOrder($consumer, $billing, $orderItemArray);
     }
 
+    private function buildOrder(Customer $consumer, Address $billing, array $orderItemArray): Order
+    {
+        $order = new Order();
+        $order->setReferenceId($this->paymentAssemblerDto->getOrderDto()->getReferenceId());
+        $order->setLocale($this->paymentAssemblerDto->getCustomerDto()->getLanguage());
+        {
+            $order->setAmount(new Money($this->paymentAssemblerDto->getOrderDto()->getAmount(), $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
+            $order->setTaxAmount(new Money(0.00, $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
+            $order->setShippingAmount(new Money(0.00, $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
+            $order->setDiscountAmount(new Money(0.00, $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
+        }
+        $order->setPaymentMethod($this->paymentAssemblerDto->getPaymentDto()->getPaymentMethod());
+        $order->setPaymentGateway($this->paymentAssemblerDto->getPaymentDto()->getPaymentGateway());
+        $order->setConsumer($consumer);
+        $order->setBillingAddress($billing);
+        $order->setItems($orderItemArray);
+
+        return $order;
+    }
+
+    private function buildCustomer(): Customer
+    {
+        $consumer = new Customer();
+        $consumer->setId($this->paymentAssemblerDto->getCustomerDto()->getId());
+        $consumer->setIp($this->paymentAssemblerDto->getCustomerDto()->getIp());
+        $consumer->setFirstName($this->paymentAssemblerDto->getCustomerDto()->getName());
+        $consumer->setLastName($this->paymentAssemblerDto->getCustomerDto()->getName());
+        $consumer->setEmail($this->paymentAssemblerDto->getCustomerDto()->getEmail());
+        $consumer->setPhoneNumber($this->paymentAssemblerDto->getCustomerDto()->getPhone());
+
+        return $consumer;
+    }
+
     private function buildOrderItems(): array
     {
         $orderItemArray = [];
@@ -38,7 +71,7 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
             $orderItem = new OrderItem();
             $orderItem->setName($item->getTitle());
             $orderItem->setQuantity(1);
-            $orderItem->setType($item->getCategory());
+            $orderItem->setCategory($item->getCategory());
             $orderItem->setSku($item->getSku());
             $orderItem->setTotalAmount(new Money($item->getPrice(), $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
             $orderItem->setReferenceId($item->getReferenceId());
@@ -61,35 +94,5 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         $billing->setZipCode($this->paymentAssemblerDto->getShippingAddressDto()->getZip());
 
         return $billing;
-    }
-
-    private function buildCustomer(): Customer
-    {
-        $consumer = new Customer();
-        $consumer->setId('dd5d5'); //todo needs to be updated
-        $consumer->setFullName($this->paymentAssemblerDto->getCustomerDto()->getName());
-        $consumer->setFirstName($this->paymentAssemblerDto->getCustomerDto()->getName());
-        $consumer->setLastName($this->paymentAssemblerDto->getCustomerDto()->getName());
-        $consumer->setEmail($this->paymentAssemblerDto->getCustomerDto()->getEmail());
-        $consumer->setPhoneNumber($this->paymentAssemblerDto->getCustomerDto()->getPhone());
-
-        return $consumer;
-    }
-
-    private function buildOrder(Customer $consumer, Address $billing, array $orderItemArray): Order
-    {
-        $order = new Order();
-        $order->setReferenceId($this->paymentAssemblerDto->getOrderDto()->getReferenceId());
-        $order->setLocale($this->paymentAssemblerDto->getCustomerDto()->getLanguage());
-        $order->setAmount(new Money($this->paymentAssemblerDto->getOrderDto()->getAmount(), $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
-        $order->setPaymentType($this->paymentAssemblerDto->getPaymentDto()->getPaymentMethod());
-        $order->setDescription('order description');
-        $order->setTaxAmount(new Money(0.00, $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
-        $order->setShippingAmount(new Money(0.00, $this->paymentAssemblerDto->getOrderDto()->getCurrency()));
-        $order->setConsumer($consumer);
-        $order->setBillingAddress($billing);
-        $order->setItems($orderItemArray);
-
-        return $order;
     }
 }

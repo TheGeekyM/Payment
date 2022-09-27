@@ -42,10 +42,8 @@ class PaymentController extends Controller
     {
         $this->validate($request, PaymentValidation::rules());
 
-        $paymentRequest = $request->get('payment');
-        $customerRequest = $request->get('customer');
-        $orderRequest = $request->get('order');
-        $shippingAddressRequest = $request->get('shipping_address');
+        [$paymentRequest, $customerRequest, $orderRequest, $shippingAddressRequest] =
+            [$request->get('payment'), $request->get('customer'), $request->get('order'), $request->get('shipping_address')];
 
         $paymentGateway = constant(PaymentGateways::class . "::" . $paymentRequest['gateway']);
         $paymentMethod = constant(PaymentMethods::class . "::" . $paymentRequest['method']);
@@ -53,14 +51,12 @@ class PaymentController extends Controller
         $paymentDto = new PaymentDto($paymentGateway, $paymentMethod);
 
         $itemsDto = collect($orderRequest['items'])->transform(function ($item) {
-            return new ItemDto($item['reference_id'], $item['title'], $item['price'], $item['sku'], $item['quantity'], $item['category']);
+            return new ItemDto($item['reference_id'], $item['title'], $item['price'], $item['sku'], $item['quantity'],
+                $item['category']);
         })->toArray();
 
         $OrderDto = new OrderDto(
-            $orderRequest['amount'],
-            $orderRequest['currency'],
-            $orderRequest['reference_id'],
-            $itemsDto
+            $orderRequest['amount'], $orderRequest['currency'], $orderRequest['reference_id'], $itemsDto
         );
 
 //        $CreditDto = new CreditDto(
@@ -70,19 +66,13 @@ class PaymentController extends Controller
 //        );
 
         $customerDto = new CustomerDto(
-            $customerRequest['id'],
-            $customerRequest['name'],
-            $customerRequest['email'],
-            $customerRequest['ip'],
-            $customerRequest['language'],
-            $customerRequest['phone'],
+            $customerRequest['id'], $customerRequest['name'], $customerRequest['email'],
+            $customerRequest['ip'], $customerRequest['language'], $customerRequest['phone'],
         );
 
         $shippingAddressDto = new ShippingAddressDto(
-            $shippingAddressRequest['country'],
-            $shippingAddressRequest['city'],
-            $shippingAddressRequest['address'],
-            $shippingAddressRequest['zip'],
+            $shippingAddressRequest['country'], $shippingAddressRequest['city'],
+            $shippingAddressRequest['address'], $shippingAddressRequest['zip'],
         );
 
         $paymentDto = new PaymentAssemblerDto($paymentDto, $OrderDto, $customerDto, $shippingAddressDto);

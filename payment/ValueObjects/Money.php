@@ -2,13 +2,18 @@
 
 namespace Payment\ValueObjects;
 
-use http\Exception\InvalidArgumentException;
+use Payment\Entities\Exceptions\AmountIsLessThanZeroException;
+use Payment\Entities\Exceptions\InvalidCurrency;
 
 class Money
 {
     private int $amount;
     private string $currency;
 
+    /**
+     * @throws AmountIsLessThanZeroException
+     * @throws InvalidCurrency
+     */
     public function __construct(int $amount, string $currency)
     {
         $this->setAmount($amount);
@@ -30,18 +35,24 @@ class Money
         return $this->currency;
     }
 
+    /**
+     * @throws AmountIsLessThanZeroException
+     */
     private function setAmount(int $amount): void
     {
         if ($amount < 0) {
-            throw new InvalidArgumentException("Amount {$amount} must be greater or equal zero");
+            throw new AmountIsLessThanZeroException("Amount {$amount} must be greater or equal zero");
         }
         $this->amount = $amount;
     }
 
+    /**
+     * @throws InvalidCurrency
+     */
     private function setCurrency(string $currency): void
     {
         if (!in_array($currency, ['EGP', 'SAR'])) {
-            throw new InvalidArgumentException("Currency {$currency} must be SAR or EGP");
+            throw new InvalidCurrency("Currency {$currency} must be SAR or EGP");
         }
         $this->currency = $currency;
     }

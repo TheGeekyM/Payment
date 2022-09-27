@@ -12,15 +12,6 @@ class OrderItem
      */
     private string $referenceId;
 
-    /**
-     * @var Money
-     */
-    private Money $taxAmount;
-
-    /**
-     * @var \Payment\ValueObjects\Money
-     */
-    private Money $totalAmount;
 
     /**
      * @var string
@@ -30,12 +21,7 @@ class OrderItem
     /**
      * @var string
      */
-    private string $type;
-
-    /**
-     * @var Money
-     */
-    private Money $unitPrice;
+    private string $category;
 
     /**
      * @var int
@@ -47,50 +33,14 @@ class OrderItem
      */
     private string $name;
 
+    /**
+     * @var Money
+     */
+    private Money $totalAmount;
+
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-
-    public function setUnitPrice(Money $unitPrice): void
-    {
-        $this->unitPrice = $unitPrice;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function setSku(string $sku): void
-    {
-        $this->sku = $sku;
-    }
-
-    public function setTotalAmount(Money $totalAmount): void
-    {
-        $this->totalAmount = $totalAmount;
-    }
-
-    public function setTaxAmount(Money $taxAmount): void
-    {
-        $this->taxAmount = $taxAmount;
-    }
-
-    public function setDiscountAmount(Money $discountAmount): void
-    {
-        $this->DdscountAmount = $discountAmount;
-    }
-
-    public function setReferenceId(string $referenceId): void
-    {
-        $this->referenceId = $referenceId;
     }
 
     /**
@@ -102,6 +52,15 @@ class OrderItem
     }
 
     /**
+     * @param int $quantity
+     * @return void
+     */
+    public function setQuantity(int $quantity): void
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
      * @return int
      */
     public function getQuantity(): int
@@ -110,19 +69,29 @@ class OrderItem
     }
 
     /**
-     * @return Money
+     * @param string $category
+     * @return void
      */
-    public function getUnitPrice(): Money
+    public function setCategory(string $category): void
     {
-        return $this->unitPrice;
+        $this->category = $category;
     }
 
     /**
      * @return string
      */
-    public function getType(): string
+    public function getCategory(): string
     {
-        return $this->type;
+        return $this->category;
+    }
+
+    /**
+     * @param string $sku
+     * @return void
+     */
+    public function setSku(string $sku): void
+    {
+        $this->sku = $sku;
     }
 
     /**
@@ -134,19 +103,25 @@ class OrderItem
     }
 
     /**
-     * @return \Payment\ValueObjects\Money
+     * @param Money $totalAmount
+     * @return void
+     */
+    public function setTotalAmount(Money $totalAmount): void
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * @return Money
      */
     public function getTotalAmount(): Money
     {
         return $this->totalAmount;
     }
 
-    /**
-     * @return Money
-     */
-    public function getTaxAmount(): Money
+    public function setReferenceId(string $referenceId): void
     {
-        return $this->taxAmount;
+        $this->referenceId = $referenceId;
     }
 
     /**

@@ -25,7 +25,7 @@ class PaymobStrategy implements PaymentStrategyInterface
      */
     public function beginTransaction(Order $order): PaymentTransactionDto
     {
-        [$integrationId, $iframe] = PaymobValidator::validatePayment($order->getPaymentType());
+        [$integrationId, $iframe] = PaymobValidator::validatePayment($order->getPaymentMethod());
 
         $auth = $this->authenticationRequest();
         $registeredOrder = $this->registerOrder($order, $auth['token']);
