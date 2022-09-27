@@ -2,6 +2,8 @@
 
 namespace Payment\Entities;
 
+use Payment\Entities\Exceptions\InvalidNameProvided;
+
 class Address
 {
     /**
@@ -107,11 +109,17 @@ class Address
 
     /**
      * @param string $lastName
+     * @throws InvalidNameProvided
      */
     public function setLastName(string $lastName): void
     {
         $name = explode(' ', $lastName);
-        $this->lastName = $name[1] ?? 'John';
+
+        if (!isset($name[1])) {
+            throw new InvalidNameProvided('Invalid first name provided');
+        }
+
+        $this->lastName = $name[1];
     }
 
     /**
@@ -124,11 +132,17 @@ class Address
 
     /**
      * @param string $firstName
+     * @throws InvalidNameProvided
      */
     public function setFirstName(string $firstName): void
     {
         $name = explode(' ', $firstName);
-        $this->firstName = $name[0] ?? 'John';
+
+        if (!$firstName || !isset($name[0])) {
+            throw new InvalidNameProvided('Invalid first name provided');
+        }
+
+        $this->firstName = $name[0];
     }
 
     /**

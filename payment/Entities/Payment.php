@@ -49,15 +49,6 @@ class Payment extends Model
      */
     private ?array $log = NULL;
 
-    /**
-     * @var DateTime
-     */
-    private DateTime $updated_at;
-
-    /**
-     * @var DateTime
-     */
-    private DateTime $created_at;
 
     /**
      * @var string
@@ -112,22 +103,6 @@ class Payment extends Model
     public function setPaymentMethod(PaymentMethods $payment_method): void
     {
         $this->payment_method = $payment_method;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updated_at;
     }
 
     /**
@@ -218,5 +193,13 @@ class Payment extends Model
     public function setCurrency(string $currency): void
     {
         $this->currency = $currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
     }
 }
