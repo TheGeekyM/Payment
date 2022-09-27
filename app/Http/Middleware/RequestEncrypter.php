@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Payment\Contracts\EncrypterInterface;
 use Closure;
 
@@ -21,12 +22,13 @@ class RequestEncrypter
      * @param Request $request
      * @param \Closure $next
      * @return mixed
+     * @throws ValidationException
      */
     public function handle(Request $request, Closure $next)
     {
         if (config('app.env') !== 'local') {
             if (!$request->has('data')) {
-                throw new \InvalidArgumentException('Request data is required', 422);
+                throw ValidationException::withMessages(['data' => 'data input is required']);
             }
 
             $request->request->add($this->encrypter->decrypt($request->request->get('data')));
