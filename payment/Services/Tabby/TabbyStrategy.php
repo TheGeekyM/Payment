@@ -35,16 +35,16 @@ class TabbyStrategy implements PaymentStrategyInterface
      */
     private function createSession(array $request): array
     {
-        return $this->client->sendAuthorizedRequest(config('tabby.url_v2'). '/checkout',
+        return $this->client->sendAuthorizedRequest(config('tabby.url_v2') . '/checkout',
             config('tabby.public_key'), 'post', $request);
     }
 
     /**
      * @throws Exception
      */
-    public function processedCallback(array $data): CallbackDto
+    public function processedServerCallback(array $data): CallbackDto
     {
-        $response = $this->client->sendAuthorizedRequest(config('tabby.url_v2'). "/payments/{$data['payment_id']}",
+        $response = $this->client->sendAuthorizedRequest(config('tabby.url_v2') . "/payments/{$data['payment_id']}",
             config('tabby.private_key'), 'get');
 
         if (isset($response['status']) && $response['status'] === 'AUTHORIZED') {
@@ -56,6 +56,14 @@ class TabbyStrategy implements PaymentStrategyInterface
         }
 
         throw new InvalidPaymentId('Payment Id is Invalid', 400);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function processClientResponse(array $data): CallbackDto
+    {
+        return $this->processedServerCallback($data);
     }
 
     private function captureAmount(string $paymentId, string $amount): array

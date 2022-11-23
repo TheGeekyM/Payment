@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use JetBrains\PhpStorm\NoReturn;
 use Payment\Dtos\CustomerDto;
 use Payment\Dtos\ItemDto;
 use Payment\Dtos\OrderDto;
@@ -83,16 +84,30 @@ class PaymentController extends Controller
      * @param string $paymentGateway
      * @return JsonResponse
      */
-    public function callback(Request $request, string $paymentGateway): JsonResponse
+    public function serverCallback(Request $request, string $paymentGateway): JsonResponse
     {
         $paymentGateway = constant(PaymentGateways::class . '::' . $paymentGateway);
-        $response = $this->paymentService->processResponse($request->all(), $paymentGateway);
+        $response = $this->paymentService->processServerResponse($request->all(), $paymentGateway);
 
-        return response()->json(['data' => [
-            'status' => $response->getStatus()->name,
-            'reference_id' => $response->getReferenceId(),
-            'order_id' => $response->getOrderId(),
-            'data' => $response->getData()
-        ]]);
+        return response()->json([
+            'data' => [
+                'status' => $response->getStatus()->name,
+                'reference_id' => $response->getReferenceId(),
+                'order_id' => $response->getOrderId(),
+                'data' => $response->getData()
+            ]]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $paymentGateway
+     */
+    #[NoReturn] public function clientCallback(Request $request, string $paymentGateway): void
+    {
+        $paymentGateway = constant(PaymentGateways::class . '::' . $paymentGateway);
+        $url = $this->paymentService->processClientResponse($request->all(), $paymentGateway);
+
+        header('Location: ' . $url);
+        exit();
     }
 }

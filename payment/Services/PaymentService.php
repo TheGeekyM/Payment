@@ -51,9 +51,9 @@ class PaymentService
             ->beginTransaction($order);
     }
 
-    public function processResponse(array $data, PaymentGateways $paymentGateway): CallbackDto
+    public function processServerResponse(array $data, PaymentGateways $paymentGateway): CallbackDto
     {
-        $callback = PaymentFactory::getInstance($paymentGateway)->processedCallback($data);
+        $callback = PaymentFactory::getInstance($paymentGateway)->processedServerCallback($data);
 
         {
             $payment = $this->repository->findBy('reference_id', $callback->getReferenceId());
@@ -69,5 +69,10 @@ class PaymentService
         event(new OrderCreatedEvent($payment));
 
         return $callback;
+    }
+
+    public function processClientResponse(array $data, PaymentGateways $paymentGateway): string
+    {
+        return PaymentFactory::getInstance($paymentGateway)->processedClientCallback($data);
     }
 }

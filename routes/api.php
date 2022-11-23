@@ -23,4 +23,5 @@ $router->group(['middleware' => 'encrypter'], function ($router) {
 });
 
 $router->get('api/pay/{paymentGateway}/callback', 'PaymentController@callback');
-$router->post('api/pay/{paymentGateway}/callback', 'PaymentController@callback');
+$router->get('api/pay/{paymentGateway}/client-callback', 'PaymentController@clientCallback');
+$router->post('api/pay/{paymentGateway}/server-callback', 'PaymentController@serverCallback');

@@ -56,7 +56,7 @@ class TamaraStrategy implements PaymentStrategyInterface
     /**
      * @throws Exception
      */
-    public function processedCallback(array $data): CallbackDto
+    public function processedServerCallback(array $data): CallbackDto
     {
         if ($data['paymentStatus'] === 'approved') {
             $this->authorizePayment($data['orderId']);
@@ -77,6 +77,14 @@ class TamaraStrategy implements PaymentStrategyInterface
         }
 
         throw new InvalidPaymentId('Payment Id Id Invalid');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function processClientResponse(array $data): CallbackDto
+    {
+        return $this->processedServerCallback($data);
     }
 
     private function getOrder(string $paymentId): array

@@ -10,5 +10,7 @@ interface PaymentStrategyInterface
 {
     public function beginTransaction(Order $order): PaymentTransactionDto;
 
-    public function processedCallback(array $data): CallbackDto;
+    public function processedServerCallback(array $data): CallbackDto;
+
+    public function processedClientCallback(array $data): string;
 }
