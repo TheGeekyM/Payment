@@ -2,6 +2,7 @@
 
 namespace Payment\Services\Paymob;
 
+use JetBrains\PhpStorm\NoReturn;
 use Payment\Contracts\HttpClientInterface;
 use Payment\Contracts\PaymentStrategyInterface;
 use Exception;
@@ -36,6 +37,9 @@ class PaymobStrategy implements PaymentStrategyInterface
         );
     }
 
+    /**
+     * @return array
+     */
     private function authenticationRequest(): array
     {
         return $this->client->sendRequest(config('paymob.url') . 'auth/tokens',
@@ -55,14 +59,26 @@ class PaymobStrategy implements PaymentStrategyInterface
     }
 
     /**
-     * @throws \Payment\Services\Exceptions\UnsecureCallback
+     * @throws UnsecureCallback
      */
     public function processedCallback(array $data): CallbackDto
+    {
+        if (request()->method() === 'POST') {
+            return $this->handleServerRequest($data);
+        }
+
+        $this->handleFrontRequest($data);
+    }
+
+    /**
+     * @throws UnsecureCallback
+     */
+    private function handleServerRequest(array $data): CallbackDto
     {
         $obj = $data['obj'];
         $order = $obj['order'];
 
-        if (!PaymobValidator::validateResponse($data)) {
+        if (!PaymobValidator::validateServerResponse($data)) {
             throw new UnsecureCallback('Invalid response received');
         }
 
@@ -79,5 +95,27 @@ class PaymobStrategy implements PaymentStrategyInterface
         }
 
         return new CallbackDto(OrderStatuses::failed, $data, $order['merchant_order_id'], $order['id']);
+    }
+
+    #[NoReturn] private function handleFrontRequest(array $data): void
+    {
+        if (!PaymobValidator::validateFrontResponse($data)) {
+            header('Location: ' . config('payment.failure_url') . '?id=' . $data['id']);
+        }
+
+        if ($data['success'] && !$data['is_voided'] && !$data['is_refunded']) {
+            header('Location: ' . config('payment.success_url') . '?id=' . $data['id']);
+        }
+
+        if ($data['success'] && $data['is_voided']) {
+            header('Location: ' . config('payment.success_url') . '?id=' . $data['id']);
+        }
+
+        if ($data['success'] && $data['is_refunded']) {
+            header('Location: ' . config('payment.success_url') . '?id=' . $data['id']);
+        }
+
+        header('Location: ' . config('payment.failure_url') . '?id=' . $data['id']);
+        exit;
     }
 }

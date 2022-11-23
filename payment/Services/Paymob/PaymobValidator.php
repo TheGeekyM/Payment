@@ -19,7 +19,7 @@ class PaymobValidator
         };
     }
 
-    public static function validateResponse(array $data): bool
+    public static function validateServerResponse(array $data): bool
     {
         $connectionString = '';
         $hmac = $data['hmac'];
@@ -64,5 +64,42 @@ class PaymobValidator
         }
 
         return hash_hmac('sha512', $connectionString, config('paymob.hmac')) === $hmac;
+    }
+
+    public static function validateFrontResponse(array $data): bool
+    {
+        ksort($data);
+        $connectionString = '';
+
+        $array = [
+            'amount_cents',
+            'created_at',
+            'currency',
+            'error_occured',
+            'has_parent_transaction',
+            'id',
+            'integration_id',
+            'is_3d_secure',
+            'is_auth',
+            'is_capture',
+            'is_refunded',
+            'is_standalone_payment',
+            'is_voided',
+            'order',
+            'owner',
+            'pending',
+            'source_data_pan',
+            'source_data_sub_type',
+            'source_data_type',
+            'success'
+        ];
+
+        foreach($data as $key => $value)   {
+            if(in_array($key, $array, TRUE)){
+                $connectionString .= $value;
+            }
+        }
+
+        return hash_hmac('sha512', $connectionString, config('paymob.hmac')) === $data['hmac'];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Payment\Entities;
 
-use DateTime;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Payment\Enums\PaymentGateways;
 use Payment\Enums\PaymentMethods;
@@ -30,19 +29,20 @@ class Payment extends Model
     private string $total_amount;
 
     /**
-     * @var PaymentGateways
+     * @var string
      */
-    private PaymentGateways $payment_gateway;
+    private string $payment_gateway;
+
 
     /**
-     * @var PaymentGateways
+     * @var string
      */
-    private PaymentMethods $payment_method;
+    private string $payment_method;
 
     /**
      * @var string|null
      */
-    private ?string $order_id = NULL;
+    public ?string $order_id = NULL;
 
     /**
      * @var array|null
@@ -56,11 +56,16 @@ class Payment extends Model
     private string $currency;
 
     /**
+     * @var mixed
+     */
+    private mixed $service_name;
+
+    /**
      * @param string $reference_id
      */
     public function setReferenceId(string $reference_id): void
     {
-        $this->reference_id = $reference_id;
+        $this->attributes['reference_id'] = $reference_id;
     }
 
     /**
@@ -68,7 +73,7 @@ class Payment extends Model
      */
     public function setStatus(string $status): void
     {
-        $this->status = $status;
+        $this->attributes['status'] = $status;
     }
 
     /**
@@ -76,7 +81,7 @@ class Payment extends Model
      */
     public function setUserId(string $user_id): void
     {
-        $this->user_id = $user_id;
+        $this->attributes['user_id'] = $user_id;
     }
 
     /**
@@ -84,14 +89,14 @@ class Payment extends Model
      */
     public function setTotalAmount(string $total_amount): void
     {
-        $this->total_amount = $total_amount;
+        $this->attributes['total_amount'] = $total_amount;
     }
 
 
     /**
-     * @return PaymentMethods
+     * @return string
      */
-    public function getPaymentMethod(): PaymentMethods
+    public function getPaymentMethod(): string
     {
         return $this->payment_method;
     }
@@ -102,7 +107,7 @@ class Payment extends Model
      */
     public function setPaymentMethod(PaymentMethods $payment_method): void
     {
-        $this->payment_method = $payment_method;
+        $this->attributes['payment_method'] = $payment_method->name;
     }
 
     /**
@@ -142,13 +147,13 @@ class Payment extends Model
      */
     public function setPaymentGateway(PaymentGateways $payment_gateway): void
     {
-        $this->payment_gateway = $payment_gateway;
+        $this->attributes['payment_gateway'] = $payment_gateway->name;
     }
 
     /**
-     * @return PaymentGateways
+     * @return string
      */
-    public function getPaymentGateway(): PaymentGateways
+    public function getPaymentGateway(): string
     {
         return $this->payment_gateway;
     }
@@ -158,7 +163,7 @@ class Payment extends Model
      */
     public function setOrderId(?string $order_id): void
     {
-        $this->order_id = $order_id;
+        $this->attributes['order_id'] = $order_id;
     }
 
     /**
@@ -175,7 +180,7 @@ class Payment extends Model
      */
     public function setLog(array $log): void
     {
-        $this->log = $log;
+        $this->attributes['log'] = $log;
     }
 
     /**
@@ -192,7 +197,7 @@ class Payment extends Model
      */
     public function setCurrency(string $currency): void
     {
-        $this->currency = $currency;
+        $this->attributes['currency'] = $currency;
     }
 
     /**
@@ -201,5 +206,23 @@ class Payment extends Model
     public function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    /**
+     * @param string $serviceName
+     * @return void
+     */
+    public function setServiceName(string $serviceName): void
+    {
+        $this->attributes['service_name'] = $serviceName;
+    }
+
+    /**
+     * @param string $serviceName
+     * @return string
+     */
+    public function gtServiceName(string $serviceName): string
+    {
+        return $this->service_name;
     }
 }

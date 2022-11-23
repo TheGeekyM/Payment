@@ -2,11 +2,14 @@
 
 namespace Payment\Services;
 
+use App\Events\OrderCreatedEvent;
+use Payment\Contracts\HttpClientInterface;
 use Payment\Contracts\PaymentRepositoryInterface;
 use Payment\Contracts\PaymentRequestBuilderInterface;
 use Payment\Dtos\CallbackDto;
 use Payment\Dtos\PaymentAssemblerDto;
 use Payment\Dtos\PaymentTransactionDto;
+use Payment\Entities\Exceptions\InvalidTotalOrderAmountException;
 use Payment\Entities\Payment;
 use Payment\Enums\PaymentGateways;
 use Payment\Factories\PaymentFactory;
@@ -22,12 +25,16 @@ class PaymentService
         $this->repository = $repository;
     }
 
+    /**
+     * @throws InvalidTotalOrderAmountException
+     */
     public function initTransaction(PaymentAssemblerDto $paymentDto): PaymentTransactionDto
     {
         $order = $this->builder->build($paymentDto);
 
         {
             $payment = new Payment();
+            $payment->setServiceName(config('payment.service_name'));
             $payment->setReferenceId($order->getReferenceId());
             $payment->setStatus('created');
             $payment->setUserId($order->getConsumer()->getId());
@@ -58,6 +65,8 @@ class PaymentService
                 $this->repository->Add($payment);
             }
         }
+
+        event(new OrderCreatedEvent($payment));
 
         return $callback;
     }

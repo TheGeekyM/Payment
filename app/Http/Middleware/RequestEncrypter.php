@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Payment\Contracts\EncrypterInterface;
 use Closure;
@@ -31,8 +32,7 @@ class RequestEncrypter
                 throw ValidationException::withMessages(['data' => 'data input is required']);
             }
 
-            $request->request->add($this->encrypter->decrypt($request->request->get('data')));
-            $request->request->remove('data');
+            $request->merge($this->encrypter->decrypt($request->get('data')));
         }
 
         return $next($request);

@@ -5,6 +5,8 @@ namespace Payment\Libs;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Contracts\Encryption\StringEncrypter;
+use Illuminate\Support\Facades\Log;
+use JsonException;
 use Payment\Contracts\EncrypterInterface;
 use RuntimeException;
 
@@ -80,7 +82,7 @@ class Encrypter implements EncrypterInterface
      * @return string
      * @throws \Exception
      */
-    public static function generateKey(string $cipher): string
+    public static function generateKey(string $cipher)
     {
         return random_bytes(self::$supportedCiphers[strtolower($cipher)]['size'] ?? 32);
     }
@@ -143,9 +145,9 @@ class Encrypter implements EncrypterInterface
      * @param bool $unserialize
      * @return mixed
      *
-     * @throws DecryptException
+     * @throws DecryptException|JsonException
      */
-    public function decrypt(mixed $payload, bool $unserialize = TRUE): mixed
+    public function decrypt(mixed $payload, bool $unserialize = TRUE)
     {
         $payload = $this->getJsonPayload($payload);
 
@@ -201,6 +203,7 @@ class Encrypter implements EncrypterInterface
      * @return array
      *
      * @throws DecryptException
+     * @throws JsonException
      */
     protected function getJsonPayload($payload)
     {
@@ -267,7 +270,7 @@ class Encrypter implements EncrypterInterface
      *
      * @return string
      */
-    public function getKey(): string
+    public function getKey()
     {
         return $this->key;
     }

@@ -16,7 +16,7 @@ interface EncrypterInterface
      *
      * @throws EncryptException
      */
-    public function encrypt(mixed $value, bool $serialize = TRUE): string;
+    public function encrypt(mixed $value, bool $serialize = true);
 
     /**
      * Decrypt the given value.
@@ -27,12 +27,12 @@ interface EncrypterInterface
      *
      * @throws DecryptException
      */
-    public function decrypt(mixed $payload, bool $unserialize = TRUE): mixed;
+    public function decrypt(mixed $payload, bool $unserialize = TRUE);
 
     /**
      * Get the encryption key that the encrypter is currently using.
      *
      * @return string
      */
-    public function getKey(): string;
+    public function getKey();
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Validations\PaymentValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Payment\Dtos\CustomerDto;
 use Payment\Dtos\ItemDto;
@@ -12,6 +13,7 @@ use Payment\Dtos\OrderDto;
 use Payment\Dtos\PaymentAssemblerDto;
 use Payment\Dtos\PaymentDto;
 use Payment\Dtos\ShippingAddressDto;
+use Payment\Entities\Exceptions\InvalidTotalOrderAmountException;
 use Payment\Enums\PaymentGateways;
 use Payment\Enums\PaymentMethods;
 use Payment\Services\PaymentService;
@@ -36,7 +38,7 @@ class PaymentController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|InvalidTotalOrderAmountException
      */
     public function pay(Request $request): JsonResponse
     {
@@ -58,12 +60,6 @@ class PaymentController extends Controller
         $OrderDto = new OrderDto(
             $orderRequest['amount'], $orderRequest['currency'], $orderRequest['reference_id'], $itemsDto
         );
-
-//        $CreditDto = new CreditDto(
-//            $customerRequest['card_number'],
-//            $customerRequest['expiry_date'],
-//            $customerRequest['card_security_code']
-//        );
 
         $customerDto = new CustomerDto(
             $customerRequest['id'], $customerRequest['name'], $customerRequest['email'],

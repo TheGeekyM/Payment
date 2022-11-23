@@ -6,6 +6,9 @@ use Payment\Contracts\PaymentRequestBuilderInterface;
 use Payment\Dtos\PaymentAssemblerDto;
 use Payment\Entities\Address;
 use Payment\Entities\Customer;
+use Payment\Entities\Exceptions\AmountIsLessThanZeroException;
+use Payment\Entities\Exceptions\InvalidCurrency;
+use Payment\Entities\Exceptions\InvalidNameProvided;
 use Payment\Entities\Order;
 use Payment\Entities\OrderItem;
 use Payment\ValueObjects\Money;
@@ -14,6 +17,11 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
 {
     private PaymentAssemblerDto $paymentAssemblerDto;
 
+    /**
+     * @throws InvalidNameProvided
+     * @throws InvalidCurrency
+     * @throws AmountIsLessThanZeroException
+     */
     public function build(PaymentAssemblerDto $paymentAssemblerDto): Order
     {
         $this->paymentAssemblerDto = $paymentAssemblerDto;
@@ -31,6 +39,10 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         return $this->buildOrder($consumer, $billing, $orderItemArray);
     }
 
+    /**
+     * @throws InvalidCurrency
+     * @throws AmountIsLessThanZeroException
+     */
     private function buildOrder(Customer $consumer, Address $billing, array $orderItemArray): Order
     {
         $order = new Order();
@@ -51,6 +63,9 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         return $order;
     }
 
+    /**
+     * @throws InvalidNameProvided
+     */
     private function buildCustomer(): Customer
     {
         $consumer = new Customer();
@@ -64,6 +79,10 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         return $consumer;
     }
 
+    /**
+     * @throws InvalidCurrency
+     * @throws AmountIsLessThanZeroException
+     */
     private function buildOrderItems(): array
     {
         $orderItemArray = [];
@@ -81,6 +100,9 @@ class PaymentRequestBuilder implements PaymentRequestBuilderInterface
         return $orderItemArray;
     }
 
+    /**
+     * @throws InvalidNameProvided
+     */
     private function buildBillingAddress(): Address
     {
         $billing = new Address();
