@@ -14,7 +14,7 @@ class PaymobValidator
     public static function validatePayment(PaymentMethods $paymentMethod): array
     {
         return match ($paymentMethod) {
-            PaymentMethods::banktransfer   => [config('paymob.integration_id'), 563811],
+            PaymentMethods::banktransfer   => [config('paymob.integration_id'), config('paymob.iframe_id')],
             default                        => throw new UnsupportedPaymentMethod('Unsupported paymob method')
         };
     }

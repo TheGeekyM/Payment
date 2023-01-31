@@ -4,6 +4,7 @@ Homestead.json
 Homestead.yaml
 .env
 .env.testing
+.env.homedesign
 .phpunit.result.cache
 .phpunit.cache/
 tests/logs/

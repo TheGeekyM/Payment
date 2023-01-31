@@ -9,5 +9,7 @@ return [
 
     'integration_id' => env('PAYMOB_INTEGRATION_ID'),
 
+    'iframe_id' => env('PAYMOB_IFRAME_ID'),
+
     'url' => env('PAYMOB_URL'),
 ];
