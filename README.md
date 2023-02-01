@@ -1,16 +1,16 @@
 <div align="center">
   <img alt="Payment logo" src="https://w7.pngwing.com/pngs/519/586/png-transparent-split-payment-credit-card-computer-icons-payment-system-credit-card-angle-hand-payment.png" width="600px" />
 
-# Standalone Payment
+# Homzmart Payment
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)]()
 [![Docker Build Status](https://img.shields.io/docker/build/redocly/redoc.svg)]()
 [![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 </div>
 
-## Payment Model
+# Standalone Payment
 
-![Payment demo]([https://github.com/geekyHomz/payment/blob/main/modeling.png](https://raw.githubusercontent.com/geekyHomz/payment/main/modeling.png?token=GHSAT0AAAAAAB6GLQLEGIUGRAWHHRUTW6CIY62FNNA))
+![Payment demo](https://raw.githubusercontent.com/geekyHomz/payment/main/modeling.png?token=GHSAT0AAAAAAB6GLQLEGIUGRAWHHRUTW6CIY62FNNA)
 
 ## How To Run The Project
 
