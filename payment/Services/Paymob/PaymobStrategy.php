@@ -87,7 +87,7 @@ class PaymobStrategy implements PaymentStrategyInterface
 
     public function processedClientCallback(array $data): string
     {
-        if (!PaymobValidator::validateFrontResponse($data)) {
+        if (!PaymobValidator::validateFrontResponse($data) || $data['success'] === 'false') {
             return config('payment.failure_url') . '?id=' . $data['id'];
         }
 
